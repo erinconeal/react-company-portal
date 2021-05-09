@@ -2,21 +2,48 @@ import { Component } from "react";
 import { withRouter } from "react-router-dom";
 
 class Clients extends Component {
-  state = { loading: true };
+  state = { loading: true, clients: [] };
 
-  // async componentDidMount() {
-  //   const res = await fetch(
-  //     `http://pets-v2.dev-apis.com/pets?id=${this.props.match.params.id}`
-  //   );
-  //   const json = await res.json();
-  //   this.setState(Object.assign({ loading: false }, json.pets[0]));
-  // }
+  async componentDidMount() {
+    // from https://jsonplaceholder.typicode.com/
+    const res = await fetch("https://jsonplaceholder.typicode.com/users");
+    const json = await res.json();
+    // console.log("json", json);
+    this.setState(Object.assign({ loading: false, clients: json }));
+  }
 
   render() {
+    console.log("state", this.state);
     if (this.state.loading) {
       return <h2>loading … </h2>;
     }
-    return <h1>Clients</h1>;
+    return (
+      <div>
+        <h1>Clients</h1>
+        {this.state.clients.map((client, index) => {
+          return (
+            <div key={index}>
+              <p>Company: {client.company.name}</p>
+              <p>{client.website}</p>
+              <div>
+                Address:
+                <p>{client.address.suite}</p>
+                <p>{client.address.street}</p>
+                <p>{client.address.city}</p>
+                <p>{client.address.zipcode}</p>
+              </div>
+              <div>
+                Contact:
+                <p>
+                  {client.name} {client.email}
+                </p>
+                <p>{client.phone}</p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    );
   }
 }
 
