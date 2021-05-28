@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
 import RouteWithErrorBoundary from "./RouteWithErrorBoundary";
+import "./fontawesome";
 
 const Employees = lazy(() => import("./Employees"));
 const Clients = lazy(() => import("./Clients"));
