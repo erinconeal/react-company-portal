@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -9,13 +9,13 @@ const Header = () => {
     <header className="w-full mb-10 p-7">
       <nav className="flex items-center justify-between flex-wrap">
         <div className="flex items-center flex-shrink-0 mr-6">
-          <Link to="/">
+          <NavLink to="/">
             <FontAwesomeIcon
               icon={["fa", "atom"]}
               className="fill-current h-5 w-5 mr-2"
             />
             <span className="font-semibold text-2xl">Portal</span>
-          </Link>
+          </NavLink>
         </div>
         <div className="block sm:hidden">
           <button
@@ -38,27 +38,34 @@ const Header = () => {
           }`}
         >
           <div className="sm:flex-grow">
-            <Link to="/" className="block mt-4 sm:inline-block sm:mt-0 mr-4">
+            <NavLink
+              to="/"
+              className="block mt-4 sm:inline-block sm:mt-0 mr-4"
+              activeClassName="text-purple-500"
+              exact
+            >
               Employees
-            </Link>
-            <Link
+            </NavLink>
+            <NavLink
               to="/clients"
               className="block mt-4 sm:inline-block sm:mt-0 mr-4"
+              activeClassName="text-purple-500"
             >
               Clients
-            </Link>
-            <Link
+            </NavLink>
+            <NavLink
               to="/blog"
               className="block mt-4 sm:inline-block sm:mt-0 mr-4"
+              activeClassName="text-purple-500"
             >
               Blog
-            </Link>
+            </NavLink>
           </div>
         </div>
         <div className={showMenu ? "block" : "hidden sm:block"}>
-          <Link to="/profile" className="mt-4 sm:mt-0 inline-block">
+          <NavLink to="/profile" className="mt-4 sm:mt-0 inline-block">
             Profile
-          </Link>
+          </NavLink>
         </div>
       </nav>
     </header>

@@ -17,22 +17,24 @@ const App = () => {
       <Suspense fallback={<h1>loading route …</h1>}>
         <Router>
           <Header />
-          <Switch>
-            <RouteWithErrorBoundary
-              path="/"
-              exact
-              render={() => <Employees />}
-            />
-            <RouteWithErrorBoundary
-              path="/profile"
-              render={() => <Profile />}
-            />
-            <RouteWithErrorBoundary path="/blog" render={() => <Blog />} />
-            <RouteWithErrorBoundary
-              path="/clients"
-              render={() => <Clients />}
-            />
-          </Switch>
+          <div className="container mx-auto h-screen">
+            <Switch>
+              <RouteWithErrorBoundary
+                path="/"
+                exact
+                render={() => <Employees />}
+              />
+              <RouteWithErrorBoundary
+                path="/profile"
+                render={() => <Profile />}
+              />
+              <RouteWithErrorBoundary path="/blog" render={() => <Blog />} />
+              <RouteWithErrorBoundary
+                path="/clients"
+                render={() => <Clients />}
+              />
+            </Switch>
+          </div>
         </Router>
       </Suspense>
       <Footer />
