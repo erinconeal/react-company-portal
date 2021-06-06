@@ -4,9 +4,18 @@
 
 @layer base {
   h1 {
-    @apply text-2xl;
+    @apply text-2xl pl-4 sm:pl-0;
   }
   h2 {
     @apply text-xl;
   }
+}
+
+ul.employees > li::before {
+  display: none;
+}
+
+img.employee-img {
+  margin-top: 1em;
+  margin-bottom: 1em;
 }

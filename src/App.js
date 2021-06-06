@@ -17,7 +17,7 @@ const App = () => {
       <Suspense fallback={<h1>loading route …</h1>}>
         <Router>
           <Header />
-          <div className="container mx-auto h-screen">
+          <div className="container mx-auto min-h-screen prose">
             <Switch>
               <RouteWithErrorBoundary
                 path="/"
