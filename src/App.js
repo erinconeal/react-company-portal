@@ -13,11 +13,11 @@ const Profile = lazy(() => import("./Profile"));
 
 const App = () => {
   return (
-    <div>
+    <>
       <Suspense fallback={<h1>loading route …</h1>}>
         <Router>
           <Header />
-          <div className="container mx-auto min-h-screen prose">
+          <main className="container mx-auto min-h-screen prose">
             <Switch>
               <RouteWithErrorBoundary
                 path="/"
@@ -34,11 +34,11 @@ const App = () => {
                 render={() => <Clients />}
               />
             </Switch>
-          </div>
+          </main>
         </Router>
       </Suspense>
       <Footer />
-    </div>
+    </>
   );
 };
 

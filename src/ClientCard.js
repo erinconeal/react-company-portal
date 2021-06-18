@@ -1,16 +1,19 @@
 import { Component } from "react";
 
 class ClientCard extends Component {
-  handleDeleteClient() {}
+  handleDeleteClient(clientId) {
+    return this.props.onDeleteClient(clientId);
+  }
+  handleUpdateClient() {
+    return this.props.onUpdateClient();
+  }
 
   render() {
     const { client } = this.props;
     return (
       <div className="client-card">
         <h2>{client.company.name}</h2>
-        {client.website ? (
-          <a href={client.website}>http://www.{client.website}</a>
-        ) : null}
+        {client.website ? <a href={client.website}>{client.website}</a> : null}
         <div className="grid sm:grid-cols-2 gap-4 mt-7 clients">
           <div>
             <p>{client?.address?.suite}</p>
@@ -28,7 +31,12 @@ class ClientCard extends Component {
           </div>
         </div>
         <div className="flex space-x-5 mt-5">
-          <button className="btn btn-secondary">Update</button>
+          <button
+            className="btn btn-secondary"
+            onClick={() => this.handleUpdateClient()}
+          >
+            Update
+          </button>
           <button
             className="btn btn-danger"
             onClick={() => this.handleDeleteClient(client.id)}

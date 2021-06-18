@@ -3,10 +3,25 @@ import { Component } from "react";
 class ClientForm extends Component {
   state = {
     formInputs: {
-      address: {},
-      company: {},
+      address: {
+        suite: "",
+        city: "",
+        street: "",
+        zipcode: "",
+      },
+      company: { name: "" },
+      website: "",
+      name: "",
+      email: "",
+      phone: "",
     },
   };
+
+  componentDidMount() {
+    if (this.props.client) {
+      this.setState(Object.assign({ formInputs: this.props.client }));
+    }
+  }
 
   handleInputChange = (event, optionalObjTitle = "") => {
     const target = event.target;
@@ -21,20 +36,40 @@ class ClientForm extends Component {
     this.setState(stateCopy);
   };
 
-  handleCancelButtonClick() {}
+  handleCancelButtonClick = () => {
+    switch (this.props.submitAction) {
+      case "addClient":
+        return this.props.onCancelAddClient();
+      case "updateClient":
+        return this.props.onCancelUpdateClient();
+      default:
+        throw new Error();
+    }
+  };
 
   handleSubmitClient() {
     switch (this.props.submitAction) {
       case "addClient":
         return this.props.onAddClient(this.state.formInputs);
       case "updateClient":
-        return this.props.onUpdateClient(this.state.formInputs);
+        return this.props.onUpdateClient(
+          this.state.formInputs,
+          this.props.client.id
+        );
       default:
         throw new Error();
     }
   }
 
   render() {
+    const {
+      website,
+      name,
+      email,
+      phone,
+      address: { suite, street, city, zipcode },
+    } = this.state.formInputs;
+
     return (
       <div className="client-card">
         <h2>{this.props.title}</h2>
@@ -51,6 +86,7 @@ class ClientForm extends Component {
               type="text"
               id="companyName"
               name="name"
+              value={this.state.formInputs.company.name}
               required
               aria-required="true"
               onChange={(e) => this.handleInputChange(e, "company")}
@@ -59,9 +95,10 @@ class ClientForm extends Component {
           <div className="form-input">
             <label htmlFor="website">Website</label>
             <input
-              type="url"
+              type="text"
               id="website"
               name="website"
+              value={website}
               onChange={this.handleInputChange}
             />
           </div>
@@ -74,6 +111,7 @@ class ClientForm extends Component {
                   type="text"
                   id="suite"
                   name="suite"
+                  value={suite}
                   onChange={(e) => this.handleInputChange(e, "address")}
                 />
               </div>
@@ -85,6 +123,7 @@ class ClientForm extends Component {
                   name="street"
                   required
                   aria-required="true"
+                  value={street}
                   onChange={(e) => this.handleInputChange(e, "address")}
                 />
               </div>
@@ -96,6 +135,7 @@ class ClientForm extends Component {
                   name="city"
                   required
                   aria-required="true"
+                  value={city}
                   onChange={(e) => this.handleInputChange(e, "address")}
                 />
               </div>
@@ -107,6 +147,7 @@ class ClientForm extends Component {
                   name="zipcode"
                   required
                   aria-required="true"
+                  value={zipcode}
                   onChange={(e) => this.handleInputChange(e, "address")}
                 />
               </div>
@@ -122,6 +163,7 @@ class ClientForm extends Component {
                 name="name"
                 required
                 aria-required="true"
+                value={name}
                 onChange={this.handleInputChange}
               />
             </div>
@@ -132,6 +174,7 @@ class ClientForm extends Component {
                   type="email"
                   id="email"
                   name="email"
+                  value={email}
                   onChange={this.handleInputChange}
                 />
               </div>
@@ -141,13 +184,14 @@ class ClientForm extends Component {
                   type="tel"
                   id="phone"
                   name="phone"
+                  value={phone}
                   onChange={this.handleInputChange}
                 />
               </div>
             </div>
           </div>
           <div className="flex space-x-5 mt-5">
-            <button className="btn btn-primary" type="submit">
+            <button className="btn btn-primary">
               {this.props.submitButtonText}
             </button>
             <button
