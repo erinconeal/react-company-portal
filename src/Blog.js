@@ -44,10 +44,10 @@ const Blog = () => {
   return (
     <div>
       <h1>Blog</h1>
-      <ul className="grid grid-flow-cols sm:grid-cols-2 lg:grid-cols-3 blogs">
+      <ul className="grid grid-flow-cols sm:grid-cols-2 blogs">
         {data.map((d) => {
           return (
-            <li key={d.id}>
+            <li key={d.id} className="pr-5">
               <img alt="" src={d.download_url} />
               <h2>{d.title}</h2>
               <p>{d.body}</p>

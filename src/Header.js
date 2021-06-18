@@ -1,9 +1,24 @@
 import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useWindowDimensions from "./useWindowDimensions";
 
 const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
+  const [currentUser, setCurrentUser] = useState("");
+  const { width } = useWindowDimensions();
+
+  useEffect(() => {
+    requestProfile();
+  }, []);
+
+  async function requestProfile() {
+    // from https://randomuser.me/documentation
+    const res = await fetch("https://randomuser.me/api/?results=1");
+    const json = await res.json();
+    console.log(json.results);
+    setCurrentUser(json.results[0]);
+  }
 
   return (
     <header className="w-full mb-10 p-7">
@@ -64,7 +79,15 @@ const Header = () => {
         </div>
         <div className={showMenu ? "block" : "hidden sm:block"}>
           <NavLink to="/profile" className="mt-4 sm:mt-0 inline-block">
-            Profile
+            {width <= 640 ? (
+              "Profile"
+            ) : currentUser ? (
+              <img
+                alt={`${currentUser.name.first} ${currentUser.name.last}`}
+                src={currentUser.picture.thumbnail}
+                className="rounded-3xl"
+              />
+            ) : null}
           </NavLink>
         </div>
       </nav>
