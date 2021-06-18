@@ -29,7 +29,8 @@
   }
 }
 
-ul.employees > li::before {
+ul.employees > li::before,
+ul.blogs > li::before {
   display: none;
 }
 
