@@ -4,7 +4,7 @@ import Skeleton from "react-loading-skeleton";
 class ClientSkeleton extends Component {
   render() {
     return (
-      <div className="client-card">
+      <div className="border-card">
         <h2>
           <Skeleton />
         </h2>

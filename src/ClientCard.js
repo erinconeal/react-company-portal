@@ -11,7 +11,7 @@ class ClientCard extends Component {
   render() {
     const { client } = this.props;
     return (
-      <div className="client-card">
+      <div className="border-card">
         <h2>{client.company.name}</h2>
         {client.website ? <a href={client.website}>{client.website}</a> : null}
         <div className="grid sm:grid-cols-2 gap-4 mt-7 clients">

@@ -71,7 +71,7 @@ class ClientForm extends Component {
     } = this.state.formInputs;
 
     return (
-      <div className="client-card">
+      <div className="border-card">
         <h2>{this.props.title}</h2>
         <form
           id="clientForm"
