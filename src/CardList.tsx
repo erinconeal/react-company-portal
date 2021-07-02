@@ -1,4 +1,14 @@
-const CardList = ({
+import { FunctionComponent, ElementType } from "react";
+import { CurrentUser } from "./APIResponsesTypes";
+
+interface EProps {
+  headingTitle: string;
+  unorderedListClass: string;
+  array: CurrentUser[];
+  Component: ElementType;
+}
+
+const CardList: FunctionComponent<EProps> = ({
   headingTitle,
   unorderedListClass = "",
   array,

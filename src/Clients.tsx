@@ -1,16 +1,30 @@
 import { Component } from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 import ClientForm from "./ClientForm";
 import ClientCard from "./ClientCard";
 import ClientSkeleton from "./ClientSkeleton";
+import { ClientsAPIResponse } from "./APIResponsesTypes";
 
-const localCache = {
-  clients: [],
+let localCache: {
+  clients: ClientsAPIResponse[];
 };
 
-class Clients extends Component {
+// type ObjectWithNumberKeys = { [key: number]: boolean };
+
+type State = {
+  clients: ClientsAPIResponse[];
+  showAddForm: boolean;
+  status: string;
+  updating: {
+    [key: number]: boolean;
+  };
+};
+
+// type StateKeys = keyof State;
+
+class Clients extends Component<RouteComponentProps> {
   state = {
-    clients: [],
+    clients: [] as ClientsAPIResponse[],
     showAddForm: false,
     status: "unloaded",
     updating: {},
@@ -26,13 +40,13 @@ class Clients extends Component {
 
     try {
       this.setState(
-        Object.assign({ clients: Array(10).fill(), status: "loading" })
+        Object.assign({ clients: Array(10).fill(undefined), status: "loading" })
       );
       // from https://jsonplaceholder.typicode.com/
       const res = await fetch("https://jsonplaceholder.typicode.com/users");
-      const json = await res.json();
+      const json = (await res.json()) as ClientsAPIResponse;
       this.setState(Object.assign({ clients: json, status: "loaded" }));
-      localCache.clients = json;
+      localCache.clients = this.state.clients;
     } catch (error) {
       console.log(error);
     }
@@ -42,7 +56,7 @@ class Clients extends Component {
     this.setState(Object.assign({ showAddForm: !this.state.showAddForm }));
   };
 
-  addClient = async (form) => {
+  addClient = async (form: ClientsAPIResponse) => {
     try {
       const res = await fetch("https://jsonplaceholder.typicode.com/users", {
         method: "POST",
@@ -53,7 +67,7 @@ class Clients extends Component {
           "Content-type": "application/json; charset=UTF-8",
         },
       });
-      const json = await res.json();
+      const json = (await res.json()) as ClientsAPIResponse;
       this.setState({
         clients: [...this.state.clients, json],
         showAddForm: false,
@@ -68,7 +82,7 @@ class Clients extends Component {
     this.setState({ showAddForm: false });
   };
 
-  deleteClient = async (clientId) => {
+  deleteClient = async (clientId: number) => {
     try {
       await fetch(`https://jsonplaceholder.typicode.com/users/${clientId}`, {
         method: "DELETE",
@@ -83,22 +97,26 @@ class Clients extends Component {
     }
   };
 
-  toggleUpdateClient = (index) => {
-    this.setState((prevState) => {
+  toggleUpdateClient = (index: number) => {
+    this.setState((prevState: State) => {
       const updating = { ...prevState.updating };
       updating[index] = !updating[index];
       return { updating };
     });
   };
 
-  updateClient = async (form, clientId, index) => {
+  updateClient = async (
+    form: ClientsAPIResponse,
+    clientId: number,
+    index: number
+  ) => {
     try {
       const res = await fetch(
         `https://jsonplaceholder.typicode.com/users/${clientId}`,
         {
           method: "PUT",
           body: JSON.stringify({
-            id: clientId,
+            // id: clientId,
             ...form,
           }),
           headers: {
@@ -106,7 +124,7 @@ class Clients extends Component {
           },
         }
       );
-      const json = await res.json();
+      const json = (await res.json()) as ClientsAPIResponse;
       const updatedClientIndex = this.state.clients.findIndex(
         (client) => client.id === clientId
       );
@@ -137,39 +155,42 @@ class Clients extends Component {
         </div>
         {this.state.showAddForm ? (
           <ClientForm
-            onAddClient={this.addClient}
+            onAddClient={() => this.addClient}
             title="Add new client"
             submitButtonText="Add client"
             submitAction="addClient"
             onCancelAddClient={this.cancelAddClient}
           />
         ) : null}
-        {this.state.clients.map((client, index) => {
-          const isUpdating = this.state.updating[index];
-          return {
-            loading: <ClientSkeleton key={index} />,
-            loaded: isUpdating ? (
-              <ClientForm
-                client={client}
-                key={index}
-                onUpdateClient={(formInputs, clientID) =>
-                  this.updateClient(formInputs, clientID, index)
-                }
-                title="Update"
-                submitButtonText="Update"
-                submitAction="updateClient"
-                onCancelUpdateClient={() => this.toggleUpdateClient(index)}
-              />
-            ) : (
-              <ClientCard
-                client={client}
-                key={index}
-                onDeleteClient={this.deleteClient}
-                onUpdateClient={() => this.toggleUpdateClient(index)}
-              />
-            ),
-          }[this.state.status];
-        })}
+        {this.state.clients.forEach(
+          (client: ClientsAPIResponse, index: number) => {
+            const isUpdating = this.state.updating[index] as State;
+            return {
+              loading: <ClientSkeleton key={index} />,
+              loaded: isUpdating ? (
+                <ClientForm
+                  client={client}
+                  key={index}
+                  onUpdateClient={(
+                    formInputs: ClientsAPIResponse,
+                    clientId: number
+                  ) => this.updateClient(formInputs, clientId, index)}
+                  title="Update"
+                  submitButtonText="Update"
+                  submitAction="updateClient"
+                  onCancelUpdateClient={() => this.toggleUpdateClient(index)}
+                />
+              ) : (
+                <ClientCard
+                  client={client}
+                  key={index}
+                  onDeleteClient={() => this.deleteClient}
+                  onUpdateClient={() => this.toggleUpdateClient(index)}
+                />
+              ),
+            }[this.state.status];
+          }
+        )}
       </div>
     );
   }

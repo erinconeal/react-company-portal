@@ -1,14 +1,21 @@
-import { Component } from "react";
+import { Component, ReactNode } from "react";
+import { ClientsAPIResponse } from "./APIResponsesTypes";
 
-class ClientCard extends Component {
-  handleDeleteClient(clientId) {
+type CardProps = {
+  client: ClientsAPIResponse;
+  onDeleteClient: (clientId: number) => void;
+  onUpdateClient: () => void;
+};
+
+class ClientCard extends Component<CardProps> {
+  handleDeleteClient(clientId: number): void {
     return this.props.onDeleteClient(clientId);
   }
-  handleUpdateClient() {
+  handleUpdateClient(): void {
     return this.props.onUpdateClient();
   }
 
-  render() {
+  render(): ReactNode {
     const { client } = this.props;
     return (
       <div className="border-card">

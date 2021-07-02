@@ -1,25 +1,26 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, FunctionComponent } from "react";
 import EmployeeListItem from "./EmployeeListItem";
 import CardList from "./CardList";
+import { RandomUserAPIResponse, CurrentUser } from "./APIResponsesTypes";
 
-const localCache = {
-  employees: [],
+let localCache: {
+  employees: CurrentUser[][];
 };
 
-const Employees = () => {
-  const [, setEmployees] = useState([]);
-  const [accounting, setAccounting] = useState([]);
-  const [informationTech, setInformationTech] = useState([]);
-  const [marketing, setMarketing] = useState([]);
-  const [leadershipTeam, setLeadershipTeam] = useState([]);
+const Employees: FunctionComponent = () => {
+  const [, setEmployees] = useState<CurrentUser[][]>([]);
+  const [accounting, setAccounting] = useState<CurrentUser[]>([]);
+  const [informationTech, setInformationTech] = useState<CurrentUser[]>([]);
+  const [marketing, setMarketing] = useState<CurrentUser[]>([]);
+  const [leadershipTeam, setLeadershipTeam] = useState<CurrentUser[]>([]);
 
   useEffect(() => {
     if (!localCache.employees.length) {
-      setAccounting(Array(5).fill());
-      setInformationTech(Array(5).fill());
-      setMarketing(Array(5).fill());
-      setLeadershipTeam(Array(2).fill());
-      requestEmployees();
+      setAccounting(Array(5).fill(undefined));
+      setInformationTech(Array(5).fill(undefined));
+      setMarketing(Array(5).fill(undefined));
+      setLeadershipTeam(Array(2).fill(undefined));
+      void requestEmployees();
     } else {
       setAccounting(localCache.employees[0]);
       setInformationTech(localCache.employees[1]);
@@ -32,7 +33,7 @@ const Employees = () => {
     try {
       // from https://randomuser.me/documentation
       const res = await fetch("https://randomuser.me/api/?results=17");
-      const json = await res.json();
+      const json = (await res.json()) as RandomUserAPIResponse;
       const chunked = chunk(json.results, 5);
 
       setEmployees(chunked);
@@ -46,7 +47,7 @@ const Employees = () => {
     }
   }
 
-  function chunk(arr, len) {
+  function chunk(arr: CurrentUser[], len: number) {
     const chunks = [];
     let i = 0;
 

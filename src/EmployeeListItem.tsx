@@ -1,6 +1,8 @@
 import Skeleton from "react-loading-skeleton";
+import { FunctionComponent } from "react";
+import { CurrentUser } from "./APIResponsesTypes";
 
-const EmployeeListItem = ({ item }) => {
+const EmployeeListItem: FunctionComponent<CurrentUser> = (item) => {
   return (
     <li>
       <div className="flex my-5">
