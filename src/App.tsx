@@ -79,11 +79,21 @@ const App = () => {
           </UserProfileContext.Provider>
           <main className="container mx-auto min-h-screen prose">
             <Switch>
-              <RouteWithErrorBoundary path="/" exact component={Employees} />
-              <RouteWithErrorBoundary path="/blog" component={Blog} />
-              <RouteWithErrorBoundary path="/clients" component={Clients} />
+              <RouteWithErrorBoundary
+                path="/"
+                exact
+                render={() => <Employees />}
+              />
+              <RouteWithErrorBoundary path="/blog" render={() => <Blog />} />
+              <RouteWithErrorBoundary
+                path="/clients"
+                render={() => <Clients />}
+              />
               <UserProfileContext.Provider value={currentUser}>
-                <RouteWithErrorBoundary path="/profile" component={Profile} />
+                <RouteWithErrorBoundary
+                  path="/profile"
+                  render={() => <Profile />}
+                />
               </UserProfileContext.Provider>
             </Switch>
           </main>

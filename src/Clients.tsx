@@ -5,11 +5,9 @@ import ClientCard from "./ClientCard";
 import ClientSkeleton from "./ClientSkeleton";
 import { ClientsAPIResponse } from "./APIResponsesTypes";
 
-let localCache: {
+const localCache: {
   clients: ClientsAPIResponse[];
-};
-
-// type ObjectWithNumberKeys = { [key: number]: boolean };
+} = { clients: [] };
 
 type State = {
   clients: ClientsAPIResponse[];
@@ -19,8 +17,6 @@ type State = {
     [key: number]: boolean;
   };
 };
-
-// type StateKeys = keyof State;
 
 class Clients extends Component<RouteComponentProps> {
   state = {
@@ -162,35 +158,33 @@ class Clients extends Component<RouteComponentProps> {
             onCancelAddClient={this.cancelAddClient}
           />
         ) : null}
-        {this.state.clients.forEach(
-          (client: ClientsAPIResponse, index: number) => {
-            const isUpdating = this.state.updating[index] as State;
-            return {
-              loading: <ClientSkeleton key={index} />,
-              loaded: isUpdating ? (
-                <ClientForm
-                  client={client}
-                  key={index}
-                  onUpdateClient={(
-                    formInputs: ClientsAPIResponse,
-                    clientId: number
-                  ) => this.updateClient(formInputs, clientId, index)}
-                  title="Update"
-                  submitButtonText="Update"
-                  submitAction="updateClient"
-                  onCancelUpdateClient={() => this.toggleUpdateClient(index)}
-                />
-              ) : (
-                <ClientCard
-                  client={client}
-                  key={index}
-                  onDeleteClient={() => this.deleteClient}
-                  onUpdateClient={() => this.toggleUpdateClient(index)}
-                />
-              ),
-            }[this.state.status];
-          }
-        )}
+        {this.state.clients.map((client: ClientsAPIResponse, index: number) => {
+          const isUpdating = this.state.updating[index] as State;
+          return {
+            loading: <ClientSkeleton key={index} />,
+            loaded: isUpdating ? (
+              <ClientForm
+                client={client}
+                key={index}
+                onUpdateClient={(
+                  formInputs: ClientsAPIResponse,
+                  clientId: number
+                ) => this.updateClient(formInputs, clientId, index)}
+                title="Update"
+                submitButtonText="Update"
+                submitAction="updateClient"
+                onCancelUpdateClient={() => this.toggleUpdateClient(index)}
+              />
+            ) : (
+              <ClientCard
+                client={client}
+                key={index}
+                onDeleteClient={() => this.deleteClient}
+                onUpdateClient={() => this.toggleUpdateClient(index)}
+              />
+            ),
+          }[this.state.status];
+        })}
       </div>
     );
   }

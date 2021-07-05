@@ -3,9 +3,9 @@ import EmployeeListItem from "./EmployeeListItem";
 import CardList from "./CardList";
 import { RandomUserAPIResponse, CurrentUser } from "./APIResponsesTypes";
 
-let localCache: {
+const localCache: {
   employees: CurrentUser[][];
-};
+} = { employees: [] };
 
 const Employees: FunctionComponent = () => {
   const [, setEmployees] = useState<CurrentUser[][]>([]);

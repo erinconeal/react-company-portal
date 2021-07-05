@@ -7,7 +7,7 @@ const EmployeeListItem: FunctionComponent<CurrentUser> = (item) => {
     <li>
       <div className="flex my-5">
         <div className="hidden sm:block sm:mr-4">
-          {item ? (
+          {item.picture ? (
             <img
               src={item.picture.medium}
               alt={`${item.name.first} ${item.name.last}`}
@@ -18,25 +18,17 @@ const EmployeeListItem: FunctionComponent<CurrentUser> = (item) => {
           )}
         </div>
         <div className="flex-shrink self-center w-full">
-          {item ? (
+          {item.name ? (
             <div className="text-lg">
               {item.name.title} {item.name.first} {item.name.last}
             </div>
           ) : (
             <Skeleton />
           )}
-          {item ? (
-            <div className="text-gray-600">{item.email}</div>
-          ) : (
-            <Skeleton />
-          )}
-          {item ? (
-            <a href={`tel:${item.phone}`} className="text-gray-600">
-              {item.phone}
-            </a>
-          ) : (
-            <Skeleton />
-          )}
+          <div className="text-gray-600">{item.email || <Skeleton />}</div>
+          <a href={`tel:${item?.phone}`} className="text-gray-600">
+            {item.phone || <Skeleton />}
+          </a>
         </div>
       </div>
     </li>

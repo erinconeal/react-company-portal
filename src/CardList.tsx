@@ -19,7 +19,7 @@ const CardList: FunctionComponent<EProps> = ({
       <h2>{headingTitle}</h2>
       <ul className={unorderedListClass}>
         {array.map((item, index) => {
-          return <Component key={index} item={item} />;
+          return <Component key={index} {...item} />;
         })}
       </ul>
     </div>

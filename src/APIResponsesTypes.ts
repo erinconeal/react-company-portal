@@ -1,11 +1,5 @@
 export interface RandomUserAPIResponse {
   results: CurrentUser[];
-  info: {
-    seed: string;
-    results: number;
-    page: number;
-    version: string;
-  };
 }
 
 export interface CurrentUser {

@@ -38,13 +38,17 @@ const Blog: FunctionComponent = () => {
   }
 
   async function requestData() {
-    const [posts, images] = await Promise.all([requestPosts, requestImages]);
+    const [posts, images] = await Promise.all([
+      requestPosts(),
+      requestImages(),
+    ]);
     const combinedData: CombinedData[] = [];
-    posts ||
-      [].forEach((item: PostsAPIResponse, i: number) => {
+    if (posts && posts.length && images && images.length) {
+      posts.forEach((item: PostsAPIResponse, i: number) => {
         combinedData.push(Object.assign({}, item, images[i]));
       });
-    setData(combinedData);
+      setData(combinedData);
+    }
   }
 
   return (

@@ -1,14 +1,10 @@
 import ErrorBoundary from "./ErrorBoundary";
-import { RouteProps } from "react-router-dom";
-import { FunctionComponent, ComponentType, Component } from "react";
+import { RouteProps, Route } from "react-router-dom";
+import { FunctionComponent } from "react";
 
-type RProps = {
-  component: ComponentType;
-} & RouteProps;
-
-const RouteWithErrorBoundary: FunctionComponent<RProps> = (props: RProps) => (
-  <ErrorBoundary>
-    <Component {...props} />
+const RouteWithErrorBoundary: FunctionComponent<RouteProps> = (props) => (
+  <ErrorBoundary key={props.location?.pathname}>
+    <Route {...props} />
   </ErrorBoundary>
 );
 
