@@ -1,18 +1,26 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, FunctionComponent } from "react";
+import { PostsAPIResponse, PicsumPhotosAPIResponse } from "./APIResponsesTypes";
 
-const Blog = () => {
-  const [data, setData] = useState([]);
+interface CombinedData {
+  id: string;
+  title: string;
+  body: string;
+  download_url: string;
+}
+
+const Blog: FunctionComponent = () => {
+  const [data, setData] = useState([] as CombinedData[]);
 
   useEffect(() => {
-    requestData();
+    void requestData();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function requestPosts() {
     try {
       // from https://jsonplaceholder.typicode.com/
       const res = await fetch("https://jsonplaceholder.typicode.com/posts");
-      const json = await res.json();
-      return json;
+      const json = (await res.json()) as PostsAPIResponse[];
+      return json || [];
     } catch (error) {
       console.log(error);
     }
@@ -22,8 +30,8 @@ const Blog = () => {
     try {
       // from https://picsum.photos/
       const res = await fetch("https://picsum.photos/v2/list?limit=100");
-      const json = await res.json();
-      return json;
+      const json = (await res.json()) as PicsumPhotosAPIResponse[];
+      return json || [];
     } catch (error) {
       console.log(error);
     }
@@ -34,11 +42,13 @@ const Blog = () => {
       requestPosts(),
       requestImages(),
     ]);
-    const combinedData = posts.map((item, i) =>
-      Object.assign({}, item, images[i])
-    );
-    console.log("data", combinedData);
-    setData(combinedData);
+    const combinedData: CombinedData[] = [];
+    if (posts && posts.length && images && images.length) {
+      posts.forEach((item: PostsAPIResponse, i: number) => {
+        combinedData.push(Object.assign({}, item, images[i]));
+      });
+      setData(combinedData);
+    }
   }
 
   return (

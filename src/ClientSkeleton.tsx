@@ -1,8 +1,8 @@
-import { Component } from "react";
+import { Component, ReactNode } from "react";
 import Skeleton from "react-loading-skeleton";
 
 class ClientSkeleton extends Component {
-  render() {
+  render(): ReactNode {
     return (
       <div className="border-card">
         <h2>

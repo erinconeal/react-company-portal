@@ -1,4 +1,14 @@
-const CardList = ({
+import { FunctionComponent, ElementType } from "react";
+import { CurrentUser } from "./APIResponsesTypes";
+
+interface EProps {
+  headingTitle: string;
+  unorderedListClass: string;
+  array: CurrentUser[];
+  Component: ElementType;
+}
+
+const CardList: FunctionComponent<EProps> = ({
   headingTitle,
   unorderedListClass = "",
   array,
@@ -9,7 +19,7 @@ const CardList = ({
       <h2>{headingTitle}</h2>
       <ul className={unorderedListClass}>
         {array.map((item, index) => {
-          return <Component key={index} item={item} />;
+          return <Component key={index} {...item} />;
         })}
       </ul>
     </div>

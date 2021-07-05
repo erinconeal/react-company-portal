@@ -1,11 +1,12 @@
 import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState, lazy } from "react";
+import { useState, lazy, FunctionComponent } from "react";
 import useMediaQuery from "./useMediaQuery";
+import { IconPrefix } from "@fortawesome/fontawesome-svg-core";
 
 const HeaderProfileDropdown = lazy(() => import("./HeaderProfileDropdown"));
 
-const Header = () => {
+const Header: FunctionComponent = () => {
   const [showMenu, setShowMenu] = useState(false);
   const isMobileView = useMediaQuery("(max-width: 640px)");
 
@@ -15,7 +16,7 @@ const Header = () => {
         <div className="flex items-center flex-shrink-0 mr-6">
           <NavLink to="/">
             <FontAwesomeIcon
-              icon={["fa", "atom"]}
+              icon={["fa" as IconPrefix, "atom"]}
               className="fill-current h-5 w-5 mr-2"
             />
             <span className="font-semibold text-2xl">Portal</span>

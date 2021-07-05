@@ -1,6 +1,7 @@
 import { UserProfileContext } from "./App";
+import { FunctionComponent } from "react";
 
-const Profile = () => {
+const Profile: FunctionComponent = () => {
   return (
     <>
       <h1>Profile</h1>

@@ -1,6 +1,31 @@
-import { Component } from "react";
+import { ChangeEvent, Component, ReactNode } from "react";
+import { ClientsAPIResponse } from "./APIResponsesTypes";
 
-class ClientForm extends Component {
+type FormProps = {
+  title: string;
+  submitButtonText: string;
+};
+
+type ConditionalProps =
+  | {
+      submitAction: "updateClient";
+      onCancelUpdateClient: () => void;
+      onUpdateClient: (
+        formInputs: ClientsAPIResponse,
+        clientId: number
+      ) => void;
+      client: ClientsAPIResponse;
+    }
+  | {
+      submitAction: "addClient";
+      onCancelAddClient: () => void;
+      onAddClient: (formInputs: ClientsAPIResponse) => void;
+      client?: undefined;
+    };
+
+type Props = FormProps & ConditionalProps;
+
+class ClientForm extends Component<Props> {
   state = {
     formInputs: {
       address: {
@@ -14,21 +39,25 @@ class ClientForm extends Component {
       name: "",
       email: "",
       phone: "",
+      id: 0,
     },
   };
 
-  componentDidMount() {
+  componentDidMount(): void {
     if (this.props.client) {
       this.setState(Object.assign({ formInputs: this.props.client }));
     }
   }
 
-  handleInputChange = (event, optionalObjTitle = "") => {
-    const target = event.target;
+  handleInputChange = (
+    event: ChangeEvent,
+    optionalObjTitle: "company" | "address"
+  ): void => {
+    const target = event.target as HTMLInputElement;
     const inputValue =
       target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
-    let stateCopy = Object.assign({}, this.state);
+    const stateCopy = Object.assign({}, this.state);
     optionalObjTitle
       ? (stateCopy.formInputs[optionalObjTitle][name] = inputValue)
       : (stateCopy.formInputs[name] = inputValue);
@@ -36,7 +65,7 @@ class ClientForm extends Component {
     this.setState(stateCopy);
   };
 
-  handleCancelButtonClick = () => {
+  handleCancelButtonClick = (): void => {
     switch (this.props.submitAction) {
       case "addClient":
         return this.props.onCancelAddClient();
@@ -47,7 +76,7 @@ class ClientForm extends Component {
     }
   };
 
-  handleSubmitClient() {
+  handleSubmitClient(): void {
     switch (this.props.submitAction) {
       case "addClient":
         return this.props.onAddClient(this.state.formInputs);
@@ -61,7 +90,7 @@ class ClientForm extends Component {
     }
   }
 
-  render() {
+  render(): ReactNode {
     const {
       website,
       name,
@@ -99,7 +128,7 @@ class ClientForm extends Component {
               id="website"
               name="website"
               value={website}
-              onChange={this.handleInputChange}
+              onChange={() => this.handleInputChange}
             />
           </div>
           <div>
@@ -164,7 +193,7 @@ class ClientForm extends Component {
                 required
                 aria-required="true"
                 value={name}
-                onChange={this.handleInputChange}
+                onChange={() => this.handleInputChange}
               />
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
@@ -175,7 +204,7 @@ class ClientForm extends Component {
                   id="email"
                   name="email"
                   value={email}
-                  onChange={this.handleInputChange}
+                  onChange={() => this.handleInputChange}
                 />
               </div>
               <div className="form-input">
@@ -185,7 +214,7 @@ class ClientForm extends Component {
                   id="phone"
                   name="phone"
                   value={phone}
-                  onChange={this.handleInputChange}
+                  onChange={() => this.handleInputChange}
                 />
               </div>
             </div>
