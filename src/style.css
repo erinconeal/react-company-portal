@@ -30,7 +30,8 @@
 }
 
 ul.employees > li::before,
-ul.blogs > li::before {
+ul.blogs > li::before,
+ul.clients > li::before {
   display: none;
 }
 

@@ -158,33 +158,45 @@ class Clients extends Component<RouteComponentProps> {
             onCancelAddClient={this.cancelAddClient}
           />
         ) : null}
-        {this.state.clients.map((client: ClientsAPIResponse, index: number) => {
-          const isUpdating = this.state.updating[index] as State;
-          return {
-            loading: <ClientSkeleton key={index} />,
-            loaded: isUpdating ? (
-              <ClientForm
-                client={client}
-                key={index}
-                onUpdateClient={(
-                  formInputs: ClientsAPIResponse,
-                  clientId: number
-                ) => this.updateClient(formInputs, clientId, index)}
-                title="Update"
-                submitButtonText="Update"
-                submitAction="updateClient"
-                onCancelUpdateClient={() => this.toggleUpdateClient(index)}
-              />
-            ) : (
-              <ClientCard
-                client={client}
-                key={index}
-                onDeleteClient={() => this.deleteClient}
-                onUpdateClient={() => this.toggleUpdateClient(index)}
-              />
-            ),
-          }[this.state.status];
-        })}
+        <ul className="clients">
+          {this.state.clients.map(
+            (client: ClientsAPIResponse, index: number) => {
+              const isUpdating = this.state.updating[index] as State;
+              return {
+                loading: (
+                  <li key={index}>
+                    <ClientSkeleton />
+                  </li>
+                ),
+                loaded: isUpdating ? (
+                  <li key={index}>
+                    <ClientForm
+                      client={client}
+                      onUpdateClient={(
+                        formInputs: ClientsAPIResponse,
+                        clientId: number
+                      ) => this.updateClient(formInputs, clientId, index)}
+                      title="Update"
+                      submitButtonText="Update"
+                      submitAction="updateClient"
+                      onCancelUpdateClient={() =>
+                        this.toggleUpdateClient(index)
+                      }
+                    />
+                  </li>
+                ) : (
+                  <li key={index}>
+                    <ClientCard
+                      client={client}
+                      onDeleteClient={() => this.deleteClient}
+                      onUpdateClient={() => this.toggleUpdateClient(index)}
+                    />
+                  </li>
+                ),
+              }[this.state.status];
+            }
+          )}
+        </ul>
       </div>
     );
   }
