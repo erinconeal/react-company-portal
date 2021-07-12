@@ -1,6 +1,6 @@
 import { useState, FunctionComponent } from "react";
 import { NavLink } from "react-router-dom";
-import { UserProfileContext } from "./App";
+import UserProfileContext from "./UserProfileContext";
 
 const HeaderProfileDropdown: FunctionComponent = () => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);

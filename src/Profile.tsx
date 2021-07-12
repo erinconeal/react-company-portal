@@ -1,4 +1,4 @@
-import { UserProfileContext } from "./App";
+import UserProfileContext from "./UserProfileContext";
 import { FunctionComponent } from "react";
 
 const Profile: FunctionComponent = () => {

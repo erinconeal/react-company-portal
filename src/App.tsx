@@ -1,56 +1,17 @@
 import { render } from "react-dom";
-import {
-  StrictMode,
-  lazy,
-  Suspense,
-  createContext,
-  useState,
-  useEffect,
-} from "react";
+import { StrictMode, lazy, Suspense, useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
 import RouteWithErrorBoundary from "./RouteWithErrorBoundary";
 import { RandomUserAPIResponse, CurrentUser } from "./APIResponsesTypes";
 import "./fontawesome";
+import UserProfileContext from "./UserProfileContext";
 
 const Employees = lazy(() => import("./Employees"));
 const Clients = lazy(() => import("./Clients"));
 const Blog = lazy(() => import("./Blog"));
 const Profile = lazy(() => import("./Profile"));
-
-export const UserProfileContext = createContext<CurrentUser | null>({
-  name: {
-    first: "",
-    last: "",
-    title: "",
-  },
-  picture: {
-    thumbnail: "",
-    medium: "",
-    large: "",
-  },
-  dob: {
-    date: "",
-    age: "",
-  },
-  location: {
-    street: {
-      number: "",
-      name: "",
-    },
-    city: "",
-    state: "",
-    postcode: "",
-    country: "",
-  },
-  registered: {
-    age: 0,
-  },
-  email: "",
-  phone: "",
-  cell: "",
-});
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
