@@ -1,5 +1,6 @@
 import { useEffect, useState, FunctionComponent } from "react";
 import { PostsAPIResponse, PicsumPhotosAPIResponse } from "./APIResponsesTypes";
+import Skeleton from "react-loading-skeleton";
 
 interface CombinedData {
   id: string;
@@ -8,17 +9,28 @@ interface CombinedData {
   download_url: string;
 }
 
+const localCache: {
+  blogData: CombinedData[];
+} = { blogData: [] };
+
 const Blog: FunctionComponent = () => {
-  const [data, setData] = useState([] as CombinedData[]);
+  const [data, setData] = useState<CombinedData[]>([]);
 
   useEffect(() => {
-    void requestData();
+    if (!localCache.blogData.length) {
+      setData(Array(10).fill(undefined));
+      void requestData();
+    } else {
+      setData(localCache.blogData);
+    }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function requestPosts() {
     try {
       // from https://jsonplaceholder.typicode.com/
-      const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+      const res = await fetch(
+        "https://jsonplaceholder.typicode.com/posts?_limit=10"
+      );
       const json = (await res.json()) as PostsAPIResponse[];
       return json || [];
     } catch (error) {
@@ -29,7 +41,7 @@ const Blog: FunctionComponent = () => {
   async function requestImages() {
     try {
       // from https://picsum.photos/
-      const res = await fetch("https://picsum.photos/v2/list?limit=100");
+      const res = await fetch("https://picsum.photos/v2/list?page=1&limit=10");
       const json = (await res.json()) as PicsumPhotosAPIResponse[];
       return json || [];
     } catch (error) {
@@ -48,6 +60,7 @@ const Blog: FunctionComponent = () => {
         combinedData.push(Object.assign({}, item, images[i]));
       });
       setData(combinedData);
+      localCache.blogData = combinedData;
     }
   }
 
@@ -55,12 +68,16 @@ const Blog: FunctionComponent = () => {
     <div>
       <h1>Blog</h1>
       <ul className="grid grid-flow-cols sm:grid-cols-2 blogs">
-        {data.map((d) => {
+        {data.map((d, index) => {
           return (
-            <li key={d.id} className="pr-5">
-              <img alt="" src={d.download_url} />
-              <h2>{d.title}</h2>
-              <p>{d.body}</p>
+            <li key={index} className="pr-5">
+              {d?.download_url ? (
+                <img alt="" src={d.download_url} />
+              ) : (
+                <Skeleton height={300} width={300} />
+              )}
+              <h2>{d?.title || <Skeleton />}</h2>
+              <p>{d?.body || <Skeleton count={3} />}</p>
             </li>
           );
         })}
