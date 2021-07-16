@@ -1,6 +1,14 @@
-import { useEffect, useState, FunctionComponent } from "react";
+import {
+  useEffect,
+  useState,
+  FunctionComponent,
+  useReducer,
+  useRef,
+} from "react";
 import { PostsAPIResponse, PicsumPhotosAPIResponse } from "./APIResponsesTypes";
 import Skeleton from "react-loading-skeleton";
+import useInfiniteScroll from "./useInfiniteScroll";
+import useLazyLoading from "./useLazyLoading";
 
 interface CombinedData {
   id: string;
@@ -15,6 +23,36 @@ const localCache: {
 
 const Blog: FunctionComponent = () => {
   const [data, setData] = useState<CombinedData[]>([]);
+  const imgReducer = (state, action) => {
+    switch (action.type) {
+      case "STACK_IMAGES":
+        return { ...state, images: state.images.concat(action.images) };
+      case "FETCHING_IMAGES":
+        return { ...state, fetching: action.fetching };
+      default:
+        return state;
+    }
+  };
+
+  const pageReducer = (state, action) => {
+    switch (action.type) {
+      case "ADVANCE_PAGE":
+        return { ...state, page: state.page + 1 };
+      default:
+        return state;
+    }
+  };
+
+  const [pager, pagerDispatch] = useReducer(pageReducer, { page: 0 });
+  const [imgData, imgDispatch] = useReducer(imgReducer, {
+    images: [],
+    fetching: true,
+  });
+
+  const bottomBoundaryRef = useRef(null);
+  useFetch(pager, imgDispatch);
+  useLazyLoading("XXXX", imgData.images);
+  useInfiniteScroll(bottomBoundaryRef, pagerDispatch);
 
   useEffect(() => {
     if (!localCache.blogData.length) {
