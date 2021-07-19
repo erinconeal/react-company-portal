@@ -1,7 +1,10 @@
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, MutableRefObject, Dispatch } from "react";
 
 // infinite scrolling with intersection observer
-const useInfiniteScroll = (scrollRef, dispatch) => {
+const useInfiniteScroll = (
+  scrollRef: MutableRefObject<HTMLDivElement | null>,
+  dispatch: Dispatch<{ type: "ADVANCE_PAGE" }>
+): void => {
   const scrollObserver = useCallback(
     (node) => {
       new IntersectionObserver((entries) => {

@@ -4,6 +4,7 @@ import {
   FunctionComponent,
   useReducer,
   useRef,
+  Dispatch,
 } from "react";
 import { PostsAPIResponse, PicsumPhotosAPIResponse } from "./APIResponsesTypes";
 import Skeleton from "react-loading-skeleton";
@@ -17,13 +18,28 @@ interface CombinedData {
   download_url: string;
 }
 
+type imgState = {
+  images: PicsumPhotosAPIResponse[];
+  fetching: boolean;
+};
+
+type imgAction =
+  | { type: "STACK_IMAGES"; images: PicsumPhotosAPIResponse[] }
+  | { type: "FETCHING_IMAGES"; fetching: boolean };
+
+type pageState = {
+  page: number;
+};
+
+type pageAction = { type: "ADVANCE_PAGE" };
+
 const localCache: {
   blogData: CombinedData[];
 } = { blogData: [] };
 
 const Blog: FunctionComponent = () => {
   const [data, setData] = useState<CombinedData[]>([]);
-  const imgReducer = (state, action) => {
+  const imgReducer = (state: imgState, action: imgAction) => {
     switch (action.type) {
       case "STACK_IMAGES":
         return { ...state, images: state.images.concat(action.images) };
@@ -34,7 +50,7 @@ const Blog: FunctionComponent = () => {
     }
   };
 
-  const pageReducer = (state, action) => {
+  const pageReducer = (state: pageState, action: pageAction) => {
     switch (action.type) {
       case "ADVANCE_PAGE":
         return { ...state, page: state.page + 1 };
@@ -50,7 +66,6 @@ const Blog: FunctionComponent = () => {
   });
 
   const bottomBoundaryRef = useRef(null);
-  useFetch(pager, imgDispatch);
   useLazyLoading("XXXX", imgData.images);
   useInfiniteScroll(bottomBoundaryRef, pagerDispatch);
 
@@ -76,21 +91,27 @@ const Blog: FunctionComponent = () => {
     }
   }
 
-  async function requestImages() {
+  async function requestImages(data: pageState, dispatch: Dispatch<imgAction>) {
     try {
+      dispatch({ type: "FETCHING_IMAGES", fetching: true });
       // from https://picsum.photos/
-      const res = await fetch("https://picsum.photos/v2/list?page=1&limit=10");
+      const res = await fetch(
+        `https://picsum.photos/v2/list?page=${data.page}&limit=10`
+      );
       const json = (await res.json()) as PicsumPhotosAPIResponse[];
+      dispatch({ type: "STACK_IMAGES", images: json });
+      dispatch({ type: "FETCHING_IMAGES", fetching: false });
       return json || [];
     } catch (error) {
       console.log(error);
+      dispatch({ type: "FETCHING_IMAGES", fetching: false });
     }
   }
 
   async function requestData() {
     const [posts, images] = await Promise.all([
       requestPosts(),
-      requestImages(),
+      requestImages(pager, imgDispatch),
     ]);
     const combinedData: CombinedData[] = [];
     if (posts && posts.length && images && images.length) {
