@@ -4,7 +4,6 @@ import {
   FunctionComponent,
   useReducer,
   useRef,
-  // Dispatch,
 } from "react";
 import { PostsAPIResponse, PicsumPhotosAPIResponse } from "./APIResponsesTypes";
 import Skeleton from "react-loading-skeleton";
@@ -24,10 +23,6 @@ type pageState = {
 
 type pageAction = { type: "ADVANCE_PAGE" };
 
-const localCache: {
-  blogData: CombinedData[];
-} = { blogData: [] };
-
 const Blog: FunctionComponent = () => {
   const [data, setData] = useState<CombinedData[]>([]);
   const [isFetchingData, setIsFetchingData] = useState(false);
@@ -43,23 +38,23 @@ const Blog: FunctionComponent = () => {
         return state;
     }
   };
-
   const [pager, pagerDispatch] = useReducer(pageReducer, { page: 1 });
 
   useEffect(() => {
-    // if (!localCache.blogData.length) {
-    //   setData(Array(10).fill(undefined));
     void requestData(pager.page);
-    console.log("images after concat", images);
-    console.log("posts after concat", posts);
-    console.log("data", data);
-    // } else {
-    //   setData(localCache.blogData);
-    // }
   }, [pager.page]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useLazyLoading(".card-top", data);
   useInfiniteScroll(bottomBoundaryRef, pagerDispatch);
+
+  useEffect(() => {
+    const combinedData: CombinedData[] = [];
+
+    posts.forEach((item: PostsAPIResponse, i: number) => {
+      combinedData.push(Object.assign({}, item, images[i]));
+    });
+    setData(combinedData);
+  }, [images, posts]); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function requestPosts(page: number) {
     try {
@@ -69,7 +64,7 @@ const Blog: FunctionComponent = () => {
       );
       const json = (await res.json()) as PostsAPIResponse[];
       setPosts((posts) => posts.concat(json));
-      return Promise.resolve();
+      return posts || [];
     } catch (error) {
       console.log(error);
     }
@@ -83,7 +78,7 @@ const Blog: FunctionComponent = () => {
       );
       const json = (await res.json()) as PicsumPhotosAPIResponse[];
       setImages((images) => images.concat(json));
-      return Promise.resolve();
+      return images || [];
     } catch (error) {
       console.log(error);
     }
@@ -93,15 +88,7 @@ const Blog: FunctionComponent = () => {
     try {
       setIsFetchingData(true);
       await Promise.all([requestPosts(page), requestImages(page)]);
-      const combinedData: CombinedData[] = [];
-      // if (posts && posts.length && images && images.length) {
-      posts.forEach((item: PostsAPIResponse, i: number) => {
-        combinedData.push(Object.assign({}, item, images[i]));
-      });
-      setData(combinedData);
-      localCache.blogData = combinedData;
       setIsFetchingData(false);
-      // }
     } catch (error) {
       console.log(error);
       setIsFetchingData(false);
@@ -111,35 +98,35 @@ const Blog: FunctionComponent = () => {
   return (
     <div>
       <h1>Blog</h1>
-      <ul className="grid grid-flow-cols sm:grid-cols-2 blogs">
-        {data.map((d, index) => {
-          return (
-            <li key={index} className="pr-5 card-top">
-              {d?.download_url ? (
-                <img
-                  alt=""
-                  src={"https://picsum.photos/id/870/300/300?grayscale&blur=2"}
-                  data-src={d.download_url}
-                />
-              ) : (
-                <Skeleton height={300} width={300} />
-              )}
-              <h2>{d?.title || <Skeleton />}</h2>
-              <p>{d?.body || <Skeleton count={3} />}</p>
-            </li>
-          );
-        })}
-      </ul>
+      <div>
+        <ul className="grid grid-flow-cols sm:grid-cols-2 blogs">
+          {data.map((d, index) => {
+            return (
+              <li key={index} className="pr-5 card-top">
+                {d?.download_url ? (
+                  <img
+                    alt=""
+                    src={
+                      "https://picsum.photos/id/870/300/300?grayscale&blur=2"
+                    }
+                    data-src={d.download_url}
+                  />
+                ) : (
+                  <Skeleton height={300} width={300} />
+                )}
+                <h2>{d?.title || <Skeleton />}</h2>
+                <p>{d?.body || <Skeleton count={3} />}</p>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
       {isFetchingData && (
         <div className="text-center bg-secondary m-auto p-3">
-          <p className="m-0 text-white">Getting data</p>
+          <p className="m-0 text-black">Getting data</p>
         </div>
       )}
-      <div
-        id="page-bottom-boundary"
-        style={{ border: "1px solid red" }}
-        ref={bottomBoundaryRef}
-      ></div>
+      <div id="page-bottom-boundary" ref={bottomBoundaryRef}></div>
     </div>
   );
 };

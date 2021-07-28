@@ -11,15 +11,15 @@ const useLazyLoading = (
       entries.forEach((en) => {
         if (en.intersectionRatio > 0) {
           const currentListItem = en.target as HTMLLIElement;
-          console.log("current list item", currentListItem.children);
-          if (currentListItem.children[0].tagName === "IMG") {
-            const newImgSrc = currentListItem.children[0].dataset.src;
+          const firstChild = currentListItem.children[0] as HTMLImageElement;
+          if (firstChild.tagName === "IMG") {
+            const newImgSrc = firstChild.dataset.src;
 
             // only swap out the image source if the new url exists
             if (!newImgSrc) {
               console.error("Image source is invalid");
             } else {
-              currentListItem.children[0].src = newImgSrc;
+              firstChild.src = newImgSrc;
             }
           }
           intObs.unobserve(node);
@@ -29,15 +29,15 @@ const useLazyLoading = (
     intObs.observe(node);
   }, []);
 
-  const imagesRef: MutableRefObject<HTMLLIElement[] | null> = useRef(null);
+  const listRef: MutableRefObject<HTMLLIElement[] | null> = useRef(null);
 
   useEffect(() => {
-    imagesRef.current = Array.from(document.querySelectorAll(elementSelector));
+    listRef.current = Array.from(document.querySelectorAll(elementSelector));
 
-    if (imagesRef.current) {
-      imagesRef.current.forEach((img: HTMLLIElement) => observer(img));
+    if (listRef.current) {
+      listRef.current.forEach((listItem: HTMLLIElement) => observer(listItem));
     }
-  }, [observer, imagesRef, elementSelector, items]);
+  }, [observer, listRef, elementSelector, items]);
 };
 
 export default useLazyLoading;
