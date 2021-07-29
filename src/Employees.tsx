@@ -65,24 +65,28 @@ const Employees: FunctionComponent = () => {
         unorderedListClass="employees"
         array={leadershipTeam}
         Component={EmployeeListItem}
+        testId="leadership"
       />
       <CardList
         headingTitle="Accounting"
         unorderedListClass="employees"
         array={accounting}
         Component={EmployeeListItem}
+        testId="accounting"
       />
       <CardList
         headingTitle="IT"
         unorderedListClass="employees"
         array={informationTech}
         Component={EmployeeListItem}
+        testId="it"
       />
       <CardList
         headingTitle="Marketing"
         unorderedListClass="employees"
         array={marketing}
         Component={EmployeeListItem}
+        testId="marketing"
       />
     </div>
   );
