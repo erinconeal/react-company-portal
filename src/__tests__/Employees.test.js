@@ -1,21 +1,26 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { expect, test } from "@jest/globals";
+import { expect, test, beforeEach } from "@jest/globals";
 import { render, screen, waitFor } from "@testing-library/react";
 import Employees from "../Employees";
 import { StaticRouter } from "react-router-dom";
 import randomUsers from "../randomUsers";
-test("displays a list of employees", async () => {
+import fetch from "jest-fetch-mock";
+
+beforeEach(() => {
+  fetch.resetMocks();
+});
+test("displays a list of 2 employees in the Leadership card", async () => {
+  const mockAPI = fetch.mockResponseOnce(JSON.stringify(randomUsers));
   render(
     <StaticRouter>
       <Employees />
     </StaticRouter>
   );
-  fetch.mockResponseOnce(
-    JSON.stringify({
-      results: randomUsers,
-    })
-  );
 
-  const div = await waitFor(() => screen.getByTestId("leadership"));
-  console.log("div", div);
+  // Wait until the callback does not throw an error. In this case, that means
+  // it'll wait until the mock function has been called once.
+  await waitFor(() => expect(mockAPI).toHaveBeenCalledTimes(1));
+
+  expect(
+    screen.getByTestId("leadership").querySelectorAll("li").length
+  ).toEqual(2);
 });

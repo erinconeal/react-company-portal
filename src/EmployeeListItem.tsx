@@ -25,7 +25,13 @@ const EmployeeListItem: FunctionComponent<CurrentUser> = (item) => {
           ) : (
             <Skeleton />
           )}
-          <div className="text-gray-600">{item.email || <Skeleton />}</div>
+          <div className="text-gray-600">
+            {item.email ? (
+              <a href={`mailto:${item.email}`}>{item.email}</a>
+            ) : (
+              <Skeleton />
+            )}
+          </div>
           <a href={`tel:${item?.phone}`} className="text-gray-600">
             {item.phone || <Skeleton />}
           </a>
