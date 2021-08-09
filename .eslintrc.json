@@ -24,6 +24,7 @@
       "jsx": true
     }
   },
+  "ignorePatterns": ["src/__tests__/**"],
   "env": {
     "es6": true,
     "browser": true,
@@ -41,28 +42,5 @@
         "alwaysTryTypes": true
       }
     }
-  },
-  "overrides": [
-    {
-      "files": ["src/**/*.{ts,tsx}"]
-      // "extends": [
-      //   "plugin:@typescript-eslint/recommended",
-      //   "plugin:@typescript-eslint/recommended-requiring-type-checking"
-      // ],
-      // "rules": {
-      //   "@typescript-eslint/ban-ts-comment": "off",
-      //   "@typescript-eslint/explicit-function-return-type": "off",
-      //   "@typescript-eslint/no-unused-vars": "off",
-      //   // All the @typescript-eslint/* rules here...
-      //   "@typescript-eslint/no-unnecessary-type-arguments": "error",
-      //   "@typescript-eslint/prefer-nullish-coalescing": "error",
-      //   "@typescript-eslint/prefer-optional-chain": "error"
-      // },
-      // "parser": "@typescript-eslint/parser",
-      // "parserOptions": {
-      //   "tsconfigRootDir": "./",
-      //   "project": "./tsconfig.json"
-      // }
-    }
-  ]
+  }
 }
