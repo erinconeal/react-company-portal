@@ -22,7 +22,11 @@ const Profile: FunctionComponent = () => {
                   <p>
                     {currentUser.name.first} {currentUser.name.last}
                   </p>
-                  <p>{currentUser.email}</p>
+                  <p>
+                    <a href={`mailto:${currentUser.email}`}>
+                      {currentUser.email}
+                    </a>
+                  </p>
                   <p>
                     Born {currentUser.dob.date} (Age {currentUser.dob.age})
                   </p>
@@ -44,9 +48,15 @@ const Profile: FunctionComponent = () => {
                 </div>
                 <div>
                   <h2>Phones</h2>
-                  <span>Cell: {currentUser.cell}</span>
+                  <span>
+                    Cell:{" "}
+                    <a href={`tel:${currentUser.cell}`}>{currentUser.cell}</a>
+                  </span>
                   <br />
-                  <span>Home: {currentUser.phone}</span>
+                  <span>
+                    Home:{" "}
+                    <a href={`tel:${currentUser.phone}`}>{currentUser.phone}</a>
+                  </span>
                 </div>
               </div>
               <p>Employed here for {currentUser.registered.age} years</p>

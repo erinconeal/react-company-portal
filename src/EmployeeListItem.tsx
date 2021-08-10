@@ -26,9 +26,11 @@ const EmployeeListItem: FunctionComponent<CurrentUser> = (item) => {
             <Skeleton />
           )}
           {item.email ? (
-            <a href={`mailto:${item.email}`} className="text-gray-600">
-              {item.email}
-            </a>
+            <div>
+              <a href={`mailto:${item.email}`} className="text-gray-600">
+                {item.email}
+              </a>
+            </div>
           ) : (
             <Skeleton />
           )}
