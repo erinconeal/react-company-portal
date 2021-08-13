@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { StaticRouter } from "react-router-dom";
 import Profile from "../Profile";
 import UserProfileContext from "../UserProfileContext";
-import randomUsers from "../randomUsers";
+import randomUsers from "./data/randomUsers";
 
 /**
  * A custom render to setup providers. Extends regular

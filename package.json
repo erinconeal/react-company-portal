@@ -65,7 +65,10 @@
     "automock": false,
     "resetMocks": false,
     "setupFilesAfterEnv": [
-      "./setupJest.js"
+      "./src/__tests__/setupJest.js"
+    ],
+    "testMatch": [
+      "**/__tests__/**/*.test.js"
     ]
   }
 }

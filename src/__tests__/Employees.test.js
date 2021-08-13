@@ -2,7 +2,7 @@ import { expect, test, beforeEach } from "@jest/globals";
 import { render, screen, waitFor, within } from "@testing-library/react";
 import Employees from "../Employees";
 import { StaticRouter } from "react-router-dom";
-import randomUsers from "../randomUsers";
+import randomUsers from "./data/randomUsers";
 
 beforeEach(() => {
   fetch.resetMocks();
