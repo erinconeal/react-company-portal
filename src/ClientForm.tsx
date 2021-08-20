@@ -51,7 +51,7 @@ class ClientForm extends Component<Props> {
 
   handleInputChange = (
     event: ChangeEvent,
-    optionalObjTitle: "company" | "address"
+    optionalObjTitle?: "company" | "address"
   ): void => {
     const target = event.target as HTMLInputElement;
     const inputValue =
@@ -128,7 +128,7 @@ class ClientForm extends Component<Props> {
               id="website"
               name="website"
               value={website}
-              onChange={() => this.handleInputChange}
+              onChange={(e) => this.handleInputChange(e)}
             />
           </div>
           <div>
@@ -193,7 +193,7 @@ class ClientForm extends Component<Props> {
                 required
                 aria-required="true"
                 value={name}
-                onChange={() => this.handleInputChange}
+                onChange={(e) => this.handleInputChange(e)}
               />
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
@@ -204,7 +204,7 @@ class ClientForm extends Component<Props> {
                   id="email"
                   name="email"
                   value={email}
-                  onChange={() => this.handleInputChange}
+                  onChange={(e) => this.handleInputChange(e)}
                 />
               </div>
               <div className="form-input">
@@ -214,7 +214,7 @@ class ClientForm extends Component<Props> {
                   id="phone"
                   name="phone"
                   value={phone}
-                  onChange={() => this.handleInputChange}
+                  onChange={(e) => this.handleInputChange(e)}
                 />
               </div>
             </div>

@@ -58,6 +58,7 @@ class Clients extends Component<RouteComponentProps> {
         method: "POST",
         body: JSON.stringify({
           ...form,
+          id: this.state.clients.length + 1,
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
@@ -112,7 +113,6 @@ class Clients extends Component<RouteComponentProps> {
         {
           method: "PUT",
           body: JSON.stringify({
-            // id: clientId,
             ...form,
           }),
           headers: {
@@ -151,7 +151,7 @@ class Clients extends Component<RouteComponentProps> {
         </div>
         {this.state.showAddForm ? (
           <ClientForm
-            onAddClient={() => this.addClient}
+            onAddClient={(form) => this.addClient(form)}
             title="Add new client"
             submitButtonText="Add client"
             submitAction="addClient"
@@ -164,12 +164,12 @@ class Clients extends Component<RouteComponentProps> {
               const isUpdating = this.state.updating[index] as State;
               return {
                 loading: (
-                  <li key={index}>
+                  <li key={index} data-testid={`loading${index}`}>
                     <ClientSkeleton />
                   </li>
                 ),
                 loaded: isUpdating ? (
-                  <li key={index}>
+                  <li key={index} data-testid={`updating${index}`}>
                     <ClientForm
                       client={client}
                       onUpdateClient={(
@@ -185,7 +185,7 @@ class Clients extends Component<RouteComponentProps> {
                     />
                   </li>
                 ) : (
-                  <li key={index}>
+                  <li key={index} data-testid={`loaded${index}`}>
                     <ClientCard
                       client={client}
                       onDeleteClient={() => this.deleteClient}

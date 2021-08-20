@@ -43,7 +43,7 @@ const Employees: FunctionComponent = () => {
       setMarketing(chunked[2]);
       setLeadershipTeam(chunked[3]);
     } catch (error) {
-      console.log("error", error);
+      console.log(error);
     }
   }
 
