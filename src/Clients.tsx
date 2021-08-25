@@ -1,5 +1,6 @@
 import { Component } from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
+import update from "immutability-helper";
 import ClientForm from "./ClientForm";
 import ClientCard from "./ClientCard";
 import ClientSkeleton from "./ClientSkeleton";
@@ -112,9 +113,7 @@ class Clients extends Component<RouteComponentProps> {
         `https://jsonplaceholder.typicode.com/users/${clientId}`,
         {
           method: "PUT",
-          body: JSON.stringify({
-            ...form,
-          }),
+          body: JSON.stringify(form),
           headers: {
             "Content-type": "application/json; charset=UTF-8",
           },
@@ -124,11 +123,9 @@ class Clients extends Component<RouteComponentProps> {
       const updatedClientIndex = this.state.clients.findIndex(
         (client) => client.id === clientId
       );
-      this.state.clients.splice(updatedClientIndex, 1);
-      this.setState({
-        clients: [...this.state.clients, json],
-        showAddForm: false,
-      });
+      this.setState(
+        update(this.state.clients, { $splice: [[updatedClientIndex, 1, json]] })
+      );
       localCache.clients = this.state.clients;
       this.toggleUpdateClient(index);
     } catch (error) {
@@ -172,13 +169,13 @@ class Clients extends Component<RouteComponentProps> {
                   <li key={index} data-testid={`updating${index}`}>
                     <ClientForm
                       client={client}
+                      title="Update"
+                      submitButtonText="Update"
+                      submitAction="updateClient"
                       onUpdateClient={(
                         formInputs: ClientsAPIResponse,
                         clientId: number
                       ) => this.updateClient(formInputs, clientId, index)}
-                      title="Update"
-                      submitButtonText="Update"
-                      submitAction="updateClient"
                       onCancelUpdateClient={() =>
                         this.toggleUpdateClient(index)
                       }
@@ -188,7 +185,7 @@ class Clients extends Component<RouteComponentProps> {
                   <li key={index} data-testid={`loaded${index}`}>
                     <ClientCard
                       client={client}
-                      onDeleteClient={() => this.deleteClient}
+                      onDeleteClient={(id) => this.deleteClient(id)}
                       onUpdateClient={() => this.toggleUpdateClient(index)}
                     />
                   </li>

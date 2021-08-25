@@ -61,22 +61,24 @@ test("fetches and displays a list of clients", async () => {
 });
 
 test("adds a client", async () => {
-  const newClient = {
-    name: "John Smith",
-    email: "test@test.com",
-    address: {
-      street: "123 Main Street",
-      suite: "",
-      city: "Springfield",
-      zipcode: "12345",
-    },
-    phone: "123-456-7890",
-    website: "blah.com",
-    company: {
-      name: "Acme Inc",
-    },
-  };
-  fetchMock.mockResponse(JSON.stringify(newClient));
+  fetchMock.mockResponse(
+    JSON.stringify({
+      name: "John Smith",
+      email: "test@test.com",
+      address: {
+        street: "123 Main Street",
+        suite: "",
+        city: "Springfield",
+        zipcode: "12345",
+      },
+      phone: "123-456-7890",
+      website: "blah.com",
+      company: {
+        name: "Acme Inc",
+      },
+      id: 11,
+    })
+  );
 
   render(
     <StaticRouter>
@@ -84,8 +86,8 @@ test("adds a client", async () => {
     </StaticRouter>
   );
 
-  const listitem = screen.queryAllByRole("listitem");
-  expect(listitem).toHaveLength(10);
+  let listItems = screen.queryAllByRole("listitem");
+  expect(listItems).toHaveLength(10);
   userEvent.click(screen.getByText("Add"));
   const companyNameInput = screen.getByLabelText(/company name/i);
   const websiteInput = screen.getByLabelText(/website/i);
@@ -124,14 +126,130 @@ test("adds a client", async () => {
 
   await act(() => Promise.resolve());
 
+  const addForm = screen.queryByText("add new client");
+  expect(addForm).toBeNull();
+
   // expect this info to be appended to bottom of client list
-  const listItems = await screen.findAllByTestId(/loaded/i);
+  listItems = await screen.findAllByTestId(/loaded/i);
 
   expect(listItems).toHaveLength(11);
 });
 
-test("cancels adding a client", () => {});
+test("cancels adding a client", async () => {
+  render(
+    <StaticRouter>
+      <Clients />
+    </StaticRouter>
+  );
+  userEvent.click(screen.getByText("Add"));
+  userEvent.click(screen.getByText("Cancel"));
+  const addForm = screen.queryByText("add new client");
+  expect(addForm).toBeNull();
+});
 
-test("deletes a client", async () => {});
+test("deletes a client", async () => {
+  render(
+    <StaticRouter>
+      <Clients />
+    </StaticRouter>
+  );
+  let listItems = screen.queryAllByRole("listitem");
+  expect(listItems).toHaveLength(11);
+  // click delete button within 1st card
+  const firstListItem = listItems[0];
+  expect(firstListItem).toBeInTheDocument();
+  const deleteBtn = within(firstListItem).getByText("Delete");
+  userEvent.click(deleteBtn);
 
-test("updates a client", async () => {});
+  await act(() => Promise.resolve());
+  listItems = await screen.findAllByTestId(/loaded/i);
+
+  expect(listItems).toHaveLength(10);
+  const companyName = screen.queryByText("Romaguera-Crona");
+  expect(companyName).toBeNull();
+  const companyContactName = screen.queryByText("Leanne Graham");
+  expect(companyContactName).toBeNull();
+});
+
+test("updates a client", async () => {
+  fetch.mockResponse(
+    JSON.stringify({
+      id: 2,
+      name: "Ervin Howell",
+      username: "Antonette",
+      email: "ehowell@deckow-crist.net",
+      address: {
+        street: "Victor Plains",
+        suite: "Suite 879",
+        city: "Wisokyburgh",
+        zipcode: "90566-7771",
+        geo: { lat: "-43.9509", lng: "-34.4618" },
+      },
+      phone: "010-692-6593 x09125",
+      website: "deckow-crist.net",
+      company: {
+        name: "Deckow-Crist",
+        catchPhrase: "Proactive didactic contingency",
+        bs: "synergize scalable supply-chains",
+      },
+    })
+  );
+  render(
+    <StaticRouter>
+      <Clients />
+    </StaticRouter>
+  );
+  const listItems = screen.queryAllByRole("listitem");
+  expect(listItems).toHaveLength(10);
+  // click update button within 1st card
+  const firstListItem = listItems[0];
+  expect(firstListItem).toBeInTheDocument();
+  const updateBtn = within(firstListItem).getByText("Update");
+  userEvent.click(updateBtn);
+
+  const websiteInput = screen.getByLabelText(/website/i);
+  const emailInput = screen.getByLabelText(/email/i);
+  expect(websiteInput).toHaveValue("anastasia.net");
+  userEvent.clear(websiteInput);
+  userEvent.type(websiteInput, "deckow-crist.net");
+  expect(emailInput).toHaveValue("Shanna@melissa.tv");
+  userEvent.clear(emailInput);
+  userEvent.type(emailInput, "ehowell@deckow-crist.net");
+  userEvent.click(screen.getByTestId("updateClientBtn2"));
+
+  await act(() => Promise.resolve());
+
+  // expect update form to be gone
+  expect(screen.queryByTestId("updating0")).not.toBeInTheDocument();
+
+  const loadedListItems = await screen.findAllByTestId(/loaded/i);
+  expect(loadedListItems).toHaveLength(10);
+
+  // locate website & email within first card and verify they have new values
+  expect(
+    within(firstListItem).getByText("deckow-crist.net")
+  ).toBeInTheDocument();
+  expect(
+    within(firstListItem).getByText("ehowell@deckow-crist.net")
+  ).toBeInTheDocument();
+});
+test("cancels updating a client", async () => {
+  render(
+    <StaticRouter>
+      <Clients />
+    </StaticRouter>
+  );
+  const listItems = screen.queryAllByRole("listitem");
+  expect(listItems).toHaveLength(10);
+  // click update button within 1st card
+  const firstListItem = listItems[0];
+  expect(firstListItem).toBeInTheDocument();
+  const updateBtn = within(firstListItem).getByText("Update");
+  userEvent.click(updateBtn);
+  userEvent.click(screen.getByTestId("updateClientCancelBtn2"));
+
+  // expect update form to be gone
+  expect(screen.queryByTestId("updating0")).not.toBeInTheDocument();
+  const loadedListItems = await screen.findAllByTestId(/loaded/i);
+  expect(loadedListItems).toHaveLength(10);
+});

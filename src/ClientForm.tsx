@@ -97,6 +97,7 @@ class ClientForm extends Component<Props> {
       email,
       phone,
       address: { suite, street, city, zipcode },
+      id,
     } = this.state.formInputs;
 
     return (
@@ -220,11 +221,15 @@ class ClientForm extends Component<Props> {
             </div>
           </div>
           <div className="flex space-x-5 mt-5">
-            <button className="btn btn-primary">
+            <button
+              className="btn btn-primary"
+              data-testid={`${this.props.submitAction}Btn${id}`}
+            >
               {this.props.submitButtonText}
             </button>
             <button
               className="btn btn-secondary"
+              data-testid={`${this.props.submitAction}CancelBtn${id}`}
               type="button"
               onClick={this.handleCancelButtonClick}
             >
