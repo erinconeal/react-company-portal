@@ -5,7 +5,8 @@ import Header from "./Header";
 import Footer from "./Footer";
 import RouteWithErrorBoundary from "./RouteWithErrorBoundary";
 import { RandomUserAPIResponse, CurrentUser } from "./APIResponsesTypes";
-import "./fontawesome";
+import registerIcons from "./fontawesome";
+registerIcons();
 import UserProfileContext from "./UserProfileContext";
 
 const Employees = lazy(() => import("./Employees"));

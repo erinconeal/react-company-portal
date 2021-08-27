@@ -1,25 +1,9 @@
 import { expect, test } from "@jest/globals";
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { StaticRouter } from "react-router-dom";
 import Profile from "../Profile";
-import UserProfileContext from "../UserProfileContext";
 import randomUsers from "./data/randomUsers";
-
-/**
- * A custom render to setup providers. Extends regular
- * render options with `providerProps` to allow injecting
- * different scenarios to test with.
- *
- * @see https://testing-library.com/docs/react-testing-library/setup#custom-render
- */
-const customRender = (ui, { providerProps, ...renderOptions }) => {
-  return render(
-    <UserProfileContext.Provider {...providerProps}>
-      {ui}
-    </UserProfileContext.Provider>,
-    renderOptions
-  );
-};
+import customRender from "./customRender";
 
 test("Profile shows value from provider", () => {
   const providerProps = {

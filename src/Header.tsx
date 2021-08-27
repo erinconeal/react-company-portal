@@ -1,14 +1,19 @@
+import { useState, lazy, FunctionComponent } from "react";
 import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState, lazy, FunctionComponent } from "react";
-import useMediaQuery from "./useMediaQuery";
 import { IconPrefix } from "@fortawesome/fontawesome-svg-core";
+import useMediaQuery from "./useMediaQuery";
+import useLocationChange from "./useLocationChange";
 
 const HeaderProfileDropdown = lazy(() => import("./HeaderProfileDropdown"));
 
 const Header: FunctionComponent = () => {
-  const [showMenu, setShowMenu] = useState(false);
   const isMobileView = useMediaQuery("(max-width: 640px)");
+  const [showMenu, setShowMenu] = useState(false);
+
+  useLocationChange(() => {
+    setShowMenu(false);
+  });
 
   return (
     <header className="w-full mb-10 p-7">
@@ -26,13 +31,15 @@ const Header: FunctionComponent = () => {
           <button
             className="flex items-center px-3 py-2 border rounded"
             onClick={() => setShowMenu(!showMenu)}
+            aria-label="Site menu"
+            aria-expanded={showMenu ? "true" : "false"}
+            aria-controls="siteMenu"
           >
             <svg
               className="fill-current h-3 w-3"
               viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <title>Menu</title>
               <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
             </svg>
           </button>
@@ -41,6 +48,7 @@ const Header: FunctionComponent = () => {
           className={`w-full flex-grow sm:flex sm:items-center sm:w-auto ${
             showMenu ? "block" : "hidden"
           }`}
+          id="siteMenu"
         >
           <div className="sm:flex-grow">
             <NavLink
@@ -48,6 +56,7 @@ const Header: FunctionComponent = () => {
               className="block mt-4 sm:inline-block sm:mt-0 mr-4"
               activeClassName="text-purple-500"
               exact
+              aria-current="page"
             >
               Employees
             </NavLink>
@@ -55,6 +64,7 @@ const Header: FunctionComponent = () => {
               to="/clients"
               className="block mt-4 sm:inline-block sm:mt-0 mr-4"
               activeClassName="text-purple-500"
+              aria-current="page"
             >
               Clients
             </NavLink>
@@ -62,6 +72,7 @@ const Header: FunctionComponent = () => {
               to="/blog"
               className="block mt-4 sm:inline-block sm:mt-0 mr-4"
               activeClassName="text-purple-500"
+              aria-current="page"
             >
               Blog
             </NavLink>
@@ -69,7 +80,11 @@ const Header: FunctionComponent = () => {
         </div>
         <div className={showMenu ? "block" : "hidden sm:block"}>
           {isMobileView ? (
-            <NavLink to="/profile" className="mt-4 sm:mt-0 inline-block">
+            <NavLink
+              to="/profile"
+              className="mt-4 sm:mt-0 inline-block"
+              aria-current="page"
+            >
               Profile
             </NavLink>
           ) : (

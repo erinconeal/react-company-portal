@@ -1,9 +1,14 @@
 import { useState, FunctionComponent } from "react";
 import { NavLink } from "react-router-dom";
 import UserProfileContext from "./UserProfileContext";
+import useLocationChange from "./useLocationChange";
 
 const HeaderProfileDropdown: FunctionComponent = () => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+
+  useLocationChange(() => {
+    setShowProfileMenu(false);
+  });
 
   return (
     <UserProfileContext.Consumer>
@@ -25,7 +30,7 @@ const HeaderProfileDropdown: FunctionComponent = () => {
               />
             </button>
             <ul
-              className={`absolute text-gray-700 pt-1 ${
+              className={`absolute text-gray-700 pt-1 right-0 ${
                 showProfileMenu ? "block" : "hidden"
               }`}
               id="profileMenu"
@@ -35,6 +40,7 @@ const HeaderProfileDropdown: FunctionComponent = () => {
                   to="/profile"
                   activeClassName="text-white bg-purple-500"
                   className="rounded-t rounded-b bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap"
+                  aria-current="page"
                 >
                   Profile
                 </NavLink>
