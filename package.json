@@ -10,7 +10,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "build": "parcel build src/index.html --public-url https://erinconeal.github.io/react-company-portal",
+    "build": "rm -rf dist && parcel build src/index.html --public-url /react-company-portal",
     "deploy": "gh-pages -d dist"
   },
   "author": "",
