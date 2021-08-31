@@ -13,16 +13,16 @@
     @apply px-3 py-1 rounded;
   }
   .btn-primary {
-    @apply bg-purple-500 text-white;
+    @apply bg-purple-600 text-white;
   }
   .btn-secondary {
     @apply bg-gray-500 text-white;
   }
   .btn-danger {
-    @apply bg-red-500 text-white;
+    @apply bg-red-600 text-white;
   }
   .border-card {
-    @apply p-10 bg-white shadow-lg rounded-3xl sm:p-20 my-10 border-t-8 border-purple-500 sm:pt-3;
+    @apply p-10 bg-white shadow-lg rounded-3xl sm:p-20 my-10 border-t-8 border-purple-600 sm:pt-3;
   }
   .form-input {
     @apply flex flex-col py-5;

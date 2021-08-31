@@ -1,6 +1,6 @@
 import { expect, test, beforeEach } from "@jest/globals";
 import { Suspense } from "react";
-import { screen } from "@testing-library/react";
+import { screen, act } from "@testing-library/react";
 import { StaticRouter } from "react-router-dom";
 import randomUsers from "./data/randomUsers";
 import customRender from "./customRender";
@@ -15,7 +15,7 @@ test("header has the necessary links and buttons at small screen sizes", async (
   const providerProps = {
     value: randomUsers.results[1],
   };
-  customRender(
+  const { container } = customRender(
     <Suspense fallback={<div>loading...</div>}>
       <StaticRouter>
         <Header />
@@ -34,4 +34,9 @@ test("header has the necessary links and buttons at small screen sizes", async (
   expect(screen.getByText(/blog/i)).toBeInTheDocument();
   expect(screen.getByText(/profile/i)).toBeInTheDocument();
   expect(screen.getByAltText("Charlotte Moulin")).toBeInTheDocument();
+
+  await act(async () => {
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+  });
 });

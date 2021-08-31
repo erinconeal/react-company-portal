@@ -38,7 +38,7 @@ const HeaderProfileDropdown: FunctionComponent = () => {
               <li>
                 <NavLink
                   to="/profile"
-                  activeClassName="text-white bg-purple-500"
+                  activeClassName="text-white bg-purple-600"
                   className="rounded-t rounded-b bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap"
                   aria-current="page"
                 >

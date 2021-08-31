@@ -25,6 +25,7 @@
 - improve Suspense fallback in App.tsx
 - better form validation: currently uses the Validation API
 - add animation to signal updating/deleting/adding a client
+- add end to end tests
 
 ## Project setup
 

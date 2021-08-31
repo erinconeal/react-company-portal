@@ -1,5 +1,5 @@
 import { expect, test, beforeEach } from "@jest/globals";
-import { render, screen, waitFor, within } from "@testing-library/react";
+import { render, screen, waitFor, within, act } from "@testing-library/react";
 import Employees from "../Employees";
 import { StaticRouter } from "react-router-dom";
 import randomUsers from "./data/randomUsers";
@@ -8,8 +8,8 @@ beforeEach(() => {
   fetch.resetMocks();
 });
 
-test("displays loading skeleton initially", () => {
-  render(
+test("displays loading skeleton initially", async () => {
+  const { container } = render(
     <StaticRouter>
       <Employees />
     </StaticRouter>
@@ -23,10 +23,16 @@ test("displays loading skeleton initially", () => {
   expect(images).toHaveLength(0);
   let links = screen.queryAllByRole("link");
   expect(links).toHaveLength(0);
+
+  await act(async () => {
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+  });
 });
+
 test("displays a list of employees", async () => {
   const mockAPI = fetch.mockResponse(JSON.stringify(randomUsers));
-  render(
+  const { container } = render(
     <StaticRouter>
       <Employees />
     </StaticRouter>
@@ -66,11 +72,16 @@ test("displays a list of employees", async () => {
   expect(
     within(marketingCard).getByRole("heading", { level: 2 })
   ).toHaveTextContent("Marketing");
+
+  await act(async () => {
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+  });
 });
 
-test("a list item contains a given employee's image, name, email and telephone number", () => {
+test("a list item contains a given employee's image, name, email and telephone number", async () => {
   fetch.mockResponse(JSON.stringify(randomUsers));
-  render(
+  const { container } = render(
     <StaticRouter>
       <Employees />
     </StaticRouter>
@@ -88,4 +99,9 @@ test("a list item contains a given employee's image, name, email and telephone n
   expect(
     within(leadershipCard).getByText("(438)-467-8557")
   ).toBeInTheDocument();
+
+  await act(async () => {
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+  });
 });

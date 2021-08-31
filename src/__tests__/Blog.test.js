@@ -14,21 +14,27 @@ beforeEach(() => {
 });
 
 test("displays loading skeleton initially", async () => {
-  render(
+  const { container } = render(
     <StaticRouter>
       <Blog />
     </StaticRouter>
   );
+
   expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Blog");
   const images = screen.queryAllByRole("img");
   expect(images).toHaveLength(0);
   await act(() => Promise.resolve());
+
+  await act(async () => {
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+  });
 });
 
 test("displays a list of blog cards", async () => {
   const imagesAPI = fetch.mockResponseOnce(JSON.stringify(PicsumPhotos));
   const postsAPI = fetch.mockResponseOnce(JSON.stringify(JSONPlaceholderPosts));
-  render(
+  const { container } = render(
     <StaticRouter>
       <Blog />
     </StaticRouter>
@@ -47,4 +53,9 @@ test("displays a list of blog cards", async () => {
   );
   const loadingMessage = screen.queryByText("Getting data");
   expect(loadingMessage).toBeNull();
+
+  await act(async () => {
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+  });
 });

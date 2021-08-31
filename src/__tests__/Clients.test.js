@@ -9,8 +9,8 @@ beforeEach(() => {
   fetchMock.resetMocks();
 });
 
-test("shows loading skeleton before data fetch completes", () => {
-  render(
+test("shows loading skeleton before data fetch completes", async () => {
+  const { container } = render(
     <StaticRouter>
       <Clients />
     </StaticRouter>
@@ -24,11 +24,16 @@ test("shows loading skeleton before data fetch completes", () => {
   expect(updateClientButtons).toHaveLength(0);
   const deleteButtons = screen.queryAllByText("delete");
   expect(deleteButtons).toHaveLength(0);
+
+  await act(async () => {
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+  });
 });
 
 test("fetches and displays a list of clients", async () => {
   fetchMock.mockResponse(JSON.stringify(testClients));
-  render(
+  const { container } = render(
     <StaticRouter>
       <Clients />
     </StaticRouter>
@@ -58,6 +63,11 @@ test("fetches and displays a list of clients", async () => {
   ).toBeInTheDocument();
   expect(within(firstListItem).getByText("Update")).toBeInTheDocument();
   expect(within(firstListItem).getByText("Delete")).toBeInTheDocument();
+
+  await act(async () => {
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+  });
 });
 
 test("adds a client", async () => {
@@ -80,7 +90,7 @@ test("adds a client", async () => {
     })
   );
 
-  render(
+  const { container } = render(
     <StaticRouter>
       <Clients />
     </StaticRouter>
@@ -133,10 +143,15 @@ test("adds a client", async () => {
   listItems = await screen.findAllByTestId(/loaded/i);
 
   expect(listItems).toHaveLength(11);
+
+  await act(async () => {
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+  });
 });
 
 test("cancels adding a client", async () => {
-  render(
+  const { container } = render(
     <StaticRouter>
       <Clients />
     </StaticRouter>
@@ -145,10 +160,15 @@ test("cancels adding a client", async () => {
   userEvent.click(screen.getByText("Cancel"));
   const addForm = screen.queryByText("add new client");
   expect(addForm).toBeNull();
+
+  await act(async () => {
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+  });
 });
 
 test("deletes a client", async () => {
-  render(
+  const { container } = render(
     <StaticRouter>
       <Clients />
     </StaticRouter>
@@ -169,6 +189,11 @@ test("deletes a client", async () => {
   expect(companyName).toBeNull();
   const companyContactName = screen.queryByText("Leanne Graham");
   expect(companyContactName).toBeNull();
+
+  await act(async () => {
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+  });
 });
 
 test("updates a client", async () => {
@@ -194,7 +219,7 @@ test("updates a client", async () => {
       },
     })
   );
-  render(
+  const { container } = render(
     <StaticRouter>
       <Clients />
     </StaticRouter>
@@ -232,9 +257,14 @@ test("updates a client", async () => {
   expect(
     within(firstListItem).getByText("ehowell@deckow-crist.net")
   ).toBeInTheDocument();
+
+  await act(async () => {
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+  });
 });
 test("cancels updating a client", async () => {
-  render(
+  const { container } = render(
     <StaticRouter>
       <Clients />
     </StaticRouter>
@@ -252,4 +282,9 @@ test("cancels updating a client", async () => {
   expect(screen.queryByTestId("updating0")).not.toBeInTheDocument();
   const loadedListItems = await screen.findAllByTestId(/loaded/i);
   expect(loadedListItems).toHaveLength(10);
+
+  await act(async () => {
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+  });
 });

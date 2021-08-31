@@ -1,15 +1,15 @@
 import { expect, test } from "@jest/globals";
-import { screen } from "@testing-library/react";
+import { screen, act } from "@testing-library/react";
 import { StaticRouter } from "react-router-dom";
 import Profile from "../Profile";
 import randomUsers from "./data/randomUsers";
 import customRender from "./customRender";
 
-test("Profile shows value from provider", () => {
+test("Profile shows value from provider", async () => {
   const providerProps = {
     value: randomUsers.results[1],
   };
-  customRender(
+  const { container } = customRender(
     <StaticRouter>
       <Profile />
     </StaticRouter>,
@@ -41,4 +41,9 @@ test("Profile shows value from provider", () => {
   expect(screen.getByText("075 913 80 70")).toBeInTheDocument();
   // employment length
   expect(screen.getByText("Employed here for 19 years")).toBeInTheDocument();
+
+  await act(async () => {
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+  });
 });

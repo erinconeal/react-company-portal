@@ -54,7 +54,7 @@ const Header: FunctionComponent = () => {
             <NavLink
               to="/"
               className="block mt-4 sm:inline-block sm:mt-0 mr-4"
-              activeClassName="text-purple-500"
+              activeClassName="text-purple-600"
               exact
               aria-current="page"
             >
@@ -63,7 +63,7 @@ const Header: FunctionComponent = () => {
             <NavLink
               to="/clients"
               className="block mt-4 sm:inline-block sm:mt-0 mr-4"
-              activeClassName="text-purple-500"
+              activeClassName="text-purple-600"
               aria-current="page"
             >
               Clients
@@ -71,7 +71,7 @@ const Header: FunctionComponent = () => {
             <NavLink
               to="/blog"
               className="block mt-4 sm:inline-block sm:mt-0 mr-4"
-              activeClassName="text-purple-500"
+              activeClassName="text-purple-600"
               aria-current="page"
             >
               Blog
