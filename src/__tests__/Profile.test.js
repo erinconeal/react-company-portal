@@ -3,13 +3,13 @@ import { screen, act } from "@testing-library/react";
 import { StaticRouter } from "react-router-dom";
 import Profile from "../Profile";
 import randomUsers from "./data/randomUsers";
-import customRender from "./customRender";
+import userProfileContextRender from "./userProfileContextRender";
 
 test("Profile shows value from provider", async () => {
   const providerProps = {
     value: randomUsers.results[1],
   };
-  const { container } = customRender(
+  const { container } = userProfileContextRender(
     <StaticRouter>
       <Profile />
     </StaticRouter>,

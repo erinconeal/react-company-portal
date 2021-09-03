@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { screen, act } from "@testing-library/react";
 import { StaticRouter } from "react-router-dom";
 import randomUsers from "./data/randomUsers";
-import customRender from "./customRender";
+import userProfileContextRender from "./userProfileContextRender";
 import Header from "../Header";
 import registerIcons from "../fontawesome";
 
@@ -15,7 +15,7 @@ test("header has the necessary links and buttons at small screen sizes", async (
   const providerProps = {
     value: randomUsers.results[1],
   };
-  const { container } = customRender(
+  const { container } = userProfileContextRender(
     <Suspense fallback={<div>loading...</div>}>
       <StaticRouter>
         <Header />

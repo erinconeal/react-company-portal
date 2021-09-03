@@ -1,5 +1,4 @@
-import { render } from "react-dom";
-import { StrictMode, lazy, Suspense, useState, useEffect } from "react";
+import { lazy, Suspense, useState, useEffect, FunctionComponent } from "react";
 import { BrowserRouter as Router, Switch } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -14,7 +13,7 @@ const Clients = lazy(() => import("./Clients"));
 const Blog = lazy(() => import("./Blog"));
 const Profile = lazy(() => import("./Profile"));
 
-const App = () => {
+const App: FunctionComponent = () => {
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
 
   useEffect(() => {
@@ -66,9 +65,4 @@ const App = () => {
   );
 };
 
-render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-  document.getElementById("root")
-);
+export default App;

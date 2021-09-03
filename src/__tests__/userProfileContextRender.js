@@ -8,7 +8,7 @@ import { render } from "@testing-library/react";
  *
  * @see https://testing-library.com/docs/react-testing-library/setup#custom-render
  */
-const customRender = (ui, { providerProps, ...renderOptions }) => {
+const userProfileContextRender = (ui, { providerProps, ...renderOptions }) => {
   return render(
     <UserProfileContext.Provider {...providerProps}>
       {ui}
@@ -17,4 +17,4 @@ const customRender = (ui, { providerProps, ...renderOptions }) => {
   );
 };
 
-export default customRender;
+export default userProfileContextRender;
