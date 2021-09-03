@@ -2,6 +2,12 @@ import UserProfileContext from "./UserProfileContext";
 import { FunctionComponent } from "react";
 
 const Profile: FunctionComponent = () => {
+  function formattedDate(date: string) {
+    const d = new Date(date);
+    const formattedDate = new Intl.DateTimeFormat().format(d);
+    return formattedDate;
+  }
+
   return (
     <>
       <h1>Profile</h1>
@@ -28,7 +34,8 @@ const Profile: FunctionComponent = () => {
                     </a>
                   </p>
                   <p>
-                    Born {currentUser.dob.date} (Age {currentUser.dob.age})
+                    Born {formattedDate(currentUser.dob.date)} (Age{" "}
+                    {currentUser.dob.age})
                   </p>
                 </div>
               </div>

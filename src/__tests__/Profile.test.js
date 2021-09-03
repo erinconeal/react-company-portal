@@ -28,9 +28,7 @@ test("Profile shows value from provider", async () => {
   // email
   expect(screen.getByText("charlotte.moulin@example.com")).toBeInTheDocument();
   // dob
-  expect(
-    screen.getByText("Born 1979-06-09T22:04:02.978Z (Age 42)")
-  ).toBeInTheDocument();
+  expect(screen.getByText("Born 6/9/1979 (Age 42)")).toBeInTheDocument();
   // address
   expect(screen.getByText("8096 Rue Denfert-Rochereau")).toBeInTheDocument();
   expect(screen.getByText("Monteggio, St. Gallen 4616")).toBeInTheDocument();
