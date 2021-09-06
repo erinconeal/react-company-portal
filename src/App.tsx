@@ -33,30 +33,32 @@ const App: FunctionComponent = () => {
 
   return (
     <>
-      <Suspense fallback={<h1>loading route …</h1>}>
+      <Suspense fallback={<h1>Loading…</h1>}>
         <Router>
           <UserProfileContext.Provider value={currentUser}>
             <Header />
           </UserProfileContext.Provider>
           <main className="container mx-auto min-h-screen prose">
-            <Switch>
-              <RouteWithErrorBoundary
-                path="/"
-                exact
-                render={() => <Employees />}
-              />
-              <RouteWithErrorBoundary path="/blog" render={() => <Blog />} />
-              <RouteWithErrorBoundary
-                path="/clients"
-                render={() => <Clients />}
-              />
-              <UserProfileContext.Provider value={currentUser}>
+            <Suspense fallback={<h1>Loading page...</h1>}>
+              <Switch>
                 <RouteWithErrorBoundary
-                  path="/profile"
-                  render={() => <Profile />}
+                  path="/"
+                  exact
+                  render={() => <Employees />}
                 />
-              </UserProfileContext.Provider>
-            </Switch>
+                <RouteWithErrorBoundary path="/blog" render={() => <Blog />} />
+                <RouteWithErrorBoundary
+                  path="/clients"
+                  render={() => <Clients />}
+                />
+                <UserProfileContext.Provider value={currentUser}>
+                  <RouteWithErrorBoundary
+                    path="/profile"
+                    render={() => <Profile />}
+                  />
+                </UserProfileContext.Provider>
+              </Switch>
+            </Suspense>
           </main>
         </Router>
       </Suspense>
