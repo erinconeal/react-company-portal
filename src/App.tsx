@@ -42,17 +42,24 @@ const App: FunctionComponent = () => {
             <Suspense fallback={<h1>Loading page...</h1>}>
               <Switch>
                 <RouteWithErrorBoundary
+                  title="Employees"
                   path="/"
                   exact
                   render={() => <Employees />}
                 />
-                <RouteWithErrorBoundary path="/blog" render={() => <Blog />} />
                 <RouteWithErrorBoundary
+                  title="Blog"
+                  path="/blog"
+                  render={() => <Blog />}
+                />
+                <RouteWithErrorBoundary
+                  title="Clients"
                   path="/clients"
                   render={() => <Clients />}
                 />
                 <UserProfileContext.Provider value={currentUser}>
                   <RouteWithErrorBoundary
+                    title="Profile"
                     path="/profile"
                     render={() => <Profile />}
                   />
