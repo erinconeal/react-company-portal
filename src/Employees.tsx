@@ -1,6 +1,8 @@
 import { useEffect, useState, FunctionComponent } from "react";
 import EmployeeListItem from "./EmployeeListItem";
 import CardList from "./CardList";
+import Heading from "./Heading";
+import Section from "./Section";
 import { RandomUserAPIResponse, CurrentUser } from "./APIResponsesTypes";
 
 const localCache: {
@@ -58,8 +60,8 @@ const Employees: FunctionComponent = () => {
   }
 
   return (
-    <div>
-      <h1>Employees</h1>
+    <Section>
+      <Heading>Employees</Heading>
       <CardList
         headingTitle="Leadership Team"
         unorderedListClass="employees"
@@ -88,7 +90,7 @@ const Employees: FunctionComponent = () => {
         Component={EmployeeListItem}
         testId="marketing"
       />
-    </div>
+    </Section>
   );
 };
 
