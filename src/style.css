@@ -4,7 +4,7 @@
 
 @layer base {
   h1 {
-    @apply text-2xl pl-4 sm:pl-2;
+    @apply text-2xl pl-4 md:pl-0;
   }
   h2 {
     @apply text-xl;
@@ -33,6 +33,24 @@ ul.employees > li::before,
 ul.blogs > li::before,
 ul.clients > li::before {
   display: none;
+}
+
+ul.employees > li,
+ul.blogs > li {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+ul.clients > li {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  ul.clients > li {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
 }
 
 img.employee-img {

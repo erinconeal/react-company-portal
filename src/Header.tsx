@@ -16,7 +16,7 @@ const Header: FunctionComponent = () => {
   });
 
   return (
-    <header className="w-full mb-10 p-7">
+    <header className="w-full mb-10 px-4 py-7 sm:px-7">
       <nav className="flex items-center justify-between flex-wrap">
         <div className="flex items-center flex-shrink-0 mr-6">
           <NavLink to="/">

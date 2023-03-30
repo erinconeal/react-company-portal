@@ -20,7 +20,7 @@ const CardList: FunctionComponent<EProps> = ({
 }) => {
   return (
     <div
-      className="py-10 bg-white shadow-lg rounded-3xl sm:p-20 my-5"
+      className="py-10 px-5 bg-white shadow-lg rounded-3xl sm:p-20 my-5 mx-4 sm:mx-0"
       data-testid={testId}
     >
       <Section>

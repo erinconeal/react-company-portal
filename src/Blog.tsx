@@ -99,7 +99,7 @@ const Blog: FunctionComponent = () => {
     <div>
       <h1>Blog</h1>
       <div>
-        <ul className="grid grid-flow-cols sm:grid-cols-2 blogs">
+        <ul className="grid grid-flow-cols sm:grid-cols-2 gap-5 blogs">
           {data.map((d, index) => {
             return (
               <li key={index} className="pr-5 card-top">
