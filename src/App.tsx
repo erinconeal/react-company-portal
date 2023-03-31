@@ -9,6 +9,7 @@ registerIcons();
 import UserProfileContext from "./UserProfileContext";
 
 const Employees = lazy(() => import("./Employees"));
+const Contact = lazy(() => import("./Contact"));
 const Clients = lazy(() => import("./Clients"));
 const Blog = lazy(() => import("./Blog"));
 const Profile = lazy(() => import("./Profile"));
@@ -57,6 +58,11 @@ const App: FunctionComponent = () => {
                   path="/clients"
                   render={() => <Clients />}
                 />
+                <RouteWithErrorBoundary
+                  title="Contact"
+                  path="/contact"
+                  render={() => <Contact />}
+                />
                 <UserProfileContext.Provider value={currentUser}>
                   <RouteWithErrorBoundary
                     title="Profile"
@@ -67,9 +73,9 @@ const App: FunctionComponent = () => {
               </Switch>
             </Suspense>
           </main>
+          <Footer />
         </Router>
       </Suspense>
-      <Footer />
     </>
   );
 };
