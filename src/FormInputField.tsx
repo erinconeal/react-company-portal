@@ -42,6 +42,7 @@ const FormInputField = forwardRef<HTMLInputElement, FormInputFieldProps>(
           value={value}
           onChange={handleInputChange}
           ref={ref}
+          aria-describedby={hasError ? `${id}Error` : undefined}
         />
         <div aria-live="polite">
           {hasError && (

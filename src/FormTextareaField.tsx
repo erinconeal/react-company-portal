@@ -43,6 +43,7 @@ const FormTextareaField = forwardRef<
         value={value}
         onChange={handleInputChange}
         ref={ref}
+        aria-describedby={hasError ? `${id}Error` : undefined}
         rows={rowNumber ? rowNumber : 4}
       ></textarea>
       <div aria-live="polite">
