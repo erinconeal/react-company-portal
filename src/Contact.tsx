@@ -1,10 +1,4 @@
-import {
-  FormEvent,
-  FormEventHandler,
-  FunctionComponent,
-  useRef,
-  useState,
-} from "react";
+import { FormEvent, FunctionComponent, useRef, useState } from "react";
 import Heading from "./Heading";
 import Section from "./Section";
 import FormInputField from "./FormInputField";
