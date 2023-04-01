@@ -5,11 +5,13 @@ import FormInputField from "./FormInputField";
 import FormTextareaField from "./FormTextareaField";
 
 const Contact: FunctionComponent = () => {
-  const [contactName, setContactName] = useState("");
+  const [contactForm, setContactForm] = useState({
+    name: "",
+    email: "",
+    comment: "",
+  });
   const [hasContactNameError, setHasContactNameError] = useState(false);
-  const [contactEmail, setContactEmail] = useState("");
   const [hasContactEmailError, setHasContactEmailError] = useState(false);
-  const [contactComment, setContactComment] = useState("");
   const [hasContactCommentError, setHasContactCommentError] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
   const nameRef = useRef<HTMLInputElement | null>(null);
@@ -28,19 +30,20 @@ const Contact: FunctionComponent = () => {
   };
 
   const isFormValid = () => {
-    if (!contactName) {
-      setHasContactNameError(true);
-      nameRef.current?.focus();
-    }
-    if (!contactEmail) {
-      setHasContactEmailError(true);
-      emailRef.current?.focus();
-    }
-    if (!contactComment) {
+    // use form reverse order to set focus to topmost field
+    if (!contactForm.comment) {
       setHasContactCommentError(true);
       textareaRef.current?.focus();
     }
-    if (!contactName || !contactEmail || !contactEmail) {
+    if (!contactForm.email) {
+      setHasContactEmailError(true);
+      emailRef.current?.focus();
+    }
+    if (!contactForm.name) {
+      setHasContactNameError(true);
+      nameRef.current?.focus();
+    }
+    if (!contactForm.name || !contactForm.email || !contactForm.comment) {
       return false;
     }
     return true;
@@ -62,8 +65,8 @@ const Contact: FunctionComponent = () => {
           isRequired={true}
           errorMessage="Name is required"
           hasError={hasContactNameError}
-          value={contactName}
-          onInputChange={(val) => setContactName(val)}
+          value={contactForm.name}
+          onInputChange={(val) => setContactForm({ ...contactForm, name: val })}
         />
         <FormInputField
           ref={emailRef}
@@ -73,8 +76,10 @@ const Contact: FunctionComponent = () => {
           isRequired={true}
           errorMessage="Email is required"
           hasError={hasContactEmailError}
-          value={contactEmail}
-          onInputChange={(val) => setContactEmail(val)}
+          value={contactForm.email}
+          onInputChange={(val) =>
+            setContactForm({ ...contactForm, email: val })
+          }
         />
         <FormTextareaField
           ref={textareaRef}
@@ -83,8 +88,10 @@ const Contact: FunctionComponent = () => {
           isRequired={true}
           errorMessage="Comment is required"
           hasError={hasContactCommentError}
-          value={contactComment}
-          onInputChange={(val) => setContactComment(val)}
+          value={contactForm.comment}
+          onInputChange={(val) =>
+            setContactForm({ ...contactForm, comment: val })
+          }
         />
         <div>
           <button className="btn btn-primary">Submit</button>
